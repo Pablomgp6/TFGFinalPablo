@@ -1,0 +1,367 @@
+/* Fondo rojo claro detrás del navbar */
+.navbar-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background-color: #ffcccc;
+  z-index: 0;
+}
+
+/* Personalización de los enlaces del menú */
+.nav-link-custom {
+  color: white !important;
+  font-size: 1.4rem;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+}
+
+.nav-link-custom:hover {
+  transform: scale(1.15);
+  color: #ffc107 !important; /* opcional: efecto de color en hover */
+}
+
+/* Opcional: centrar visualmente el menú */
+.nav-center {
+  flex: 1;
+  justify-content: center;
+}
+
+/* Login*/
+.login-body {
+  height: 100vh;
+  background-image: url("../img/fondo.png");
+  background-repeat: repeat;
+  background-size: 200px auto;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Tarjeta de login */
+.login-card {
+  background-color: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.8s ease;
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilo base para todos los botones */
+.btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 12px;
+}
+
+/* Animación hover para todos los botones */
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Botón negro personalizado */
+.login-btn {
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+form .form-control {
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.login-card h2 {
+  font-weight: bold;
+  color: black;
+  text-align: center;
+}
+
+/* Footer */
+
+/* Fondo rojo claro detrás del footer */
+.footer-background {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  background-color: #ffcccc;
+  margin-top: 100px;
+  z-index: 0;
+}
+
+/* Footer principal */
+.footer {
+  background-color: #212529;
+  z-index: 1;
+  text-align: center;
+}
+
+/* Links útiles */
+.footer-link {
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.2s ease, color 0.2s ease;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  transform: scale(1.2);
+  color: #ffc107;
+}
+
+/* Iconos redes */
+.footer-icon {
+  font-size: 1.5rem;
+  color: white;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.footer-icon:hover {
+  transform: scale(1.1);
+  color: #ffc107;
+}
+
+/* Crear equipo */
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.stat-label {
+  width: 80px;
+  font-weight: bold;
+}
+
+.stat-bar {
+  height: 8px;
+  background-color: yellowgreen;
+  margin-bottom: 4px;
+}
+
+.stat-ev-slider,
+.stat-iv-slider {
+  width: 100%;
+  height: 4px;
+}
+
+.stat-input {
+  width: 60px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 0.9rem;
+}
+
+.stat-header {
+  border-bottom: 1px solid white;
+  margin-bottom: 12px;
+}
+.fade-card {
+  background: linear-gradient(to bottom right, #ffcccc, #cce6ff);
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.stat-bar {
+  height: 10px;
+  margin-bottom: 4px;
+  border-radius: 5px;
+  
+}
+.stat-input {
+  width: 60px;
+  text-align: center;
+}
+.stat-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+.stat-base-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.stat-base-wrapper span {
+  min-width: 35px;
+  display: inline-block;
+  text-align: right;
+  margin-right: 5px;
+}
+.stat-bar-container {
+  flex-grow: 1;
+}
+.tituloEstadisticas {
+  margin-bottom: 30px;
+  font-weight: bolder;
+  font-size: 30px;
+}
+@media (max-width: 1000px) {
+  .ev-slider,
+  .iv-slider {
+    display: none;
+  }
+  .stat-bar {
+    display: none;
+  }
+  .stat-base-wrapper {
+    margin-bottom: 0px;
+  }
+}
+
+.tab-button {
+  min-width: 120px;
+  text-align: center;
+}
+.pokemon-form {
+  display: none;
+}
+.pokemon-form.active {
+  display: block;
+}
+
+h1.titleCreador {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      margin-top: 140px !important;
+      margin-bottom: 40px !important;
+    }
+    h1.titleCreador2 {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      margin-top: 10px !important;
+      margin-bottom: 30px !important;
+    }
+    .fade-card {
+      background: linear-gradient(to bottom right, #ffcccc, #cce6ff);
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      padding: 20px;
+      margin-top: 10px;
+    }
+    .tab-button {
+      min-width: 120px;
+      text-align: center;
+    }
+    .pokemon-form {
+      display: none;
+    }
+    .pokemon-form.active {
+      display: block;
+    }
+   #guardarEquipo{
+    background-color: #CFE1F8;
+    margin-top: 20px;
+    border-color: #CFE1F8;
+    font-weight: bolder;
+    color: black;
+    padding: 15px;
+   }
+
+
+
+   @media (max-width: 1200px) {
+  .poke-divider {
+    display: none !important;
+  }
+}
+#teamTitle {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+
+.pokemon-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 1rem;
+  overflow: hidden;
+  min-height: 260px;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.pokemon-img {
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin: 4px 2px;
+  font-size: 0.8rem;
+}
+
+/* Colores por tipo (mismos que antes) */
+.type-normal  { background-color: #A8A77A; }
+.type-fire    { background-color: #EE8130; }
+.type-water   { background-color: #6390F0; }
+.type-electric{ background-color: #F7D02C; }
+.type-grass   { background-color: #7AC74C; }
+.type-ice     { background-color: #96D9D6; }
+.type-fighting{ background-color: #C22E28; }
+.type-poison  { background-color: #A33EA1; }
+.type-ground  { background-color: #E2BF65; }
+.type-flying  { background-color: #A98FF3; }
+.type-psychic { background-color: #F95587; }
+.type-bug     { background-color: #A6B91A; }
+.type-rock    { background-color: #B6A136; }
+.type-ghost   { background-color: #735797; }
+.type-dragon  { background-color: #6F35FC; }
+.type-dark    { background-color: #705746; }
+.type-steel   { background-color: #B7B7CE; }
+.type-fairy   { background-color: #D685AD; }
+
+
+
+
+body.light-mode {
+  background-color: #f8f9fa !important;
+  color: #111 !important;
+}
+
+body.light-mode .card,
+body.light-mode section {
+  background-color: #ffffff;
+  color: #000;
+}
+

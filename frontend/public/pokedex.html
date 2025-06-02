@@ -1,0 +1,388 @@
+<!-- dentro de /frontend/public/indexhtml -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokedex - Pokémon Team Builder</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="icon" href="img/logo.png" type="image/png">
+
+</head>
+<body>
+  <!-- Fondo rojo claro detrás del navbar -->
+  <div class="navbar-background"></div>
+
+  <!-- Navbar oscuro -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <!-- Logo que actúa como link al índice -->
+      <a class="navbar-brand" href="/index">
+        <img src="img/logo.png" alt="Logo" width="80" height="80" class="d-inline-block align-text-top">
+      </a>
+
+      <!-- Hamburguesa -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menú central -->
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav nav-center">
+          <li class="nav-item mx-4">
+            <a class="nav-link nav-link-custom" href="/pokedex">Pokedex</a>
+          </li>
+          <li class="nav-item mx-4">
+            <a class="nav-link nav-link-custom" href="/crearEquipo">Creador</a>
+          </li>
+          
+          <li class="nav-item mx-4">
+            <a class="nav-link nav-link-custom" href="/misEquipos">Mis Equipos</a> <!-- Puedes cambiar esto -->
+          </li>
+        </ul>
+      </div>
+
+      <!-- Derecha: Zona dinámica de sesión -->
+<div class="d-flex" id="sessionArea">
+  <!-- Aquí se insertará el botón dinámicamente con JavaScript -->
+</div>
+
+    </div>
+  </nav>
+
+  <div >
+    <h1 class="text-center mt-5 titleCreador">Bienvenido a la Pokedex Pokémon</h1>
+  </div>
+
+ 
+
+
+  <div class="container my-4">
+  <div class="row g-3 justify-content-center">
+    <!-- Búsqueda por nombre -->
+    <div class="col-md-6">
+      <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre..." />
+    </div>
+
+    <!-- Filtro por tipo -->
+    <div class="col-md-4">
+      <select id="typeFilter" class="form-select">
+        <option value="">Filtrar por tipo</option>
+        <option value="normal">Normal</option>
+        <option value="fire">Fuego</option>
+        <option value="water">Agua</option>
+        <option value="electric">Eléctrico</option>
+        <option value="grass">Planta</option>
+        <option value="ice">Hielo</option>
+        <option value="fighting">Lucha</option>
+        <option value="poison">Veneno</option>
+        <option value="ground">Tierra</option>
+        <option value="flying">Volador</option>
+        <option value="psychic">Psíquico</option>
+        <option value="bug">Bicho</option>
+        <option value="rock">Roca</option>
+        <option value="ghost">Fantasma</option>
+        <option value="dragon">Dragón</option>
+        <option value="dark">Siniestro</option>
+        <option value="steel">Acero</option>
+        <option value="fairy">Hada</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+
+
+  <div class="container my-5">
+  <div id="pokedex" class="row g-4 justify-content-center">
+    <!-- Las tarjetas se generarán aquí -->
+  </div>
+</div>
+
+
+
+
+
+
+<!-- Footer -->
+<footer class="footer text-white py-5">
+  <div class="container">
+    <div class="row text-center align-items-center">
+      <div class="col-md-4 mb-4 mb-md-0 d-flex flex-column justify-content-center align-items-center">
+        <h5>Pokémon Team Builder</h5>
+        <p class="mb-0">&copy; 2025 Todos los derechos reservados.</p>
+      </div>
+
+      <div class="col-md-4 mb-4 mb-md-0 d-flex flex-column justify-content-center align-items-center">
+        
+        <ul class="list-unstyled">
+          <li><a href="#" class="footer-link nav-link-animated">Aviso Legal</a></li>
+          <li><a href="#" class="footer-link nav-link-animated">Política de Privacidad</a></li>
+          <li><a href="#" class="footer-link nav-link-animated">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+        
+        <div>
+          <a href="#" class="me-3 footer-icon"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="me-3 footer-icon"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="footer-icon"><i class="bi bi-tiktok"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  const sessionArea = document.getElementById('sessionArea');
+  const sessionUser = localStorage.getItem("sessionUser");
+
+  if (sessionUser) {
+    // Usuario logueado → mostrar botón "Cerrar sesión"
+    const logoutBtn = document.createElement("button");
+    logoutBtn.className = "btn btn-danger";
+    logoutBtn.textContent = "Cerrar sesión";
+
+    logoutBtn.onclick = () => {
+      localStorage.removeItem("sessionUser");
+      localStorage.removeItem("sessionEmail");
+      window.location.href = "/login";
+    };
+
+    sessionArea.appendChild(logoutBtn);
+  } else {
+    // Usuario NO logueado → mostrar "Iniciar sesión"
+    const loginLink = document.createElement("a");
+    loginLink.href = "/login";
+    loginLink.className = "btn btn-danger";
+    loginLink.textContent = "Iniciar sesión";
+
+    sessionArea.appendChild(loginLink);
+  }
+</script>
+<!-- Removed duplicate script block for pokedexContainer and related functions to avoid redeclaration error. -->
+<script>
+
+  const typeTranslations = {
+  normal: "Normal",
+  fire: "Fuego",
+  water: "Agua",
+  electric: "Eléctrico",
+  grass: "Planta",
+  ice: "Hielo",
+  fighting: "Lucha",
+  poison: "Veneno",
+  ground: "Tierra",
+  flying: "Volador",
+  psychic: "Psíquico",
+  bug: "Bicho",
+  rock: "Roca",
+  ghost: "Fantasma",
+  dragon: "Dragón",
+  dark: "Siniestro",
+  steel: "Acero",
+  fairy: "Hada"
+};
+
+  const pokedexContainer = document.getElementById("pokedex");
+  const searchInput = document.getElementById("searchInput");
+  const typeFilter = document.getElementById("typeFilter");
+
+  const batchSize = 50;
+  let currentIndex = 0;
+  let currentList = []; // Lista filtrada por tipo o completa
+  let allMetadata = []; // Toda la Pokédex
+  let isLoading = false;
+  let currentType = ""; // Guardamos el tipo actual seleccionado
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function createTypeBadge(type) {
+  const translated = typeTranslations[type] || capitalize(type);
+  return `<span class="type-badge type-${type}">${translated}</span>`;
+}
+
+
+  async function fetchPokemon(idOrUrl) {
+    const res = await fetch(
+      typeof idOrUrl === "string" ? idOrUrl : `https://pokeapi.co/api/v2/pokemon/${idOrUrl}`
+    );
+    return res.json();
+  }
+
+  function createPokemonCard(pokemon) {
+    const { id, name, types } = pokemon;
+    const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${id}.gif`;
+
+    const typeList = types.map((t) => t.type.name);
+
+    const card = document.createElement("div");
+    card.className = `col-sm-6 col-md-4 col-lg-3 pokemon-card-wrapper`;
+    card.dataset.name = name.toLowerCase();
+    card.dataset.types = typeList.join(",");
+
+    card.innerHTML = `
+      <div class="card pokemon-card text-center shadow-sm h-100">
+        <div class="bg-light py-3">
+          <img src="${spriteUrl}" alt="${name}" class="pokemon-img" data-bs-toggle="modal" data-bs-target="#pokemonModal" onclick="openPokemonModal('${spriteUrl}')"/>
+
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">#${id.toString().padStart(3, "0")} ${capitalize(name)}</h5>
+          <p class="card-text">
+            ${typeList.map((t) => createTypeBadge(t)).join("")}
+          </p>
+        </div>
+      </div>
+    `;
+
+    pokedexContainer.appendChild(card);
+  }
+
+  function clearPokedex() {
+    pokedexContainer.innerHTML = "";
+    currentIndex = 0;
+  }
+
+  async function fetchAllPokemonMetadata() {
+    const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=905");
+    const data = await res.json();
+    return data.results;
+  }
+
+  async function fetchPokemonListByType(type) {
+  const res = await fetch(`https://pokeapi.co/api/v2/type/${type}`);
+  const data = await res.json();
+
+  // Filtramos solo los que tengan ID <= 905
+  return data.pokemon
+    .map((p) => p.pokemon)
+    .filter((p) => {
+      const match = p.url.match(/\/pokemon\/(\d+)\//);
+      return match && parseInt(match[1]) <= 905;
+    });
+}
+
+
+  async function loadNextBatch() {
+    if (isLoading || currentIndex >= currentList.length) return;
+
+    isLoading = true;
+    const nextBatch = currentList.slice(currentIndex, currentIndex + batchSize);
+
+    for (const entry of nextBatch) {
+      const alreadyExists = document.querySelector(`[data-name="${entry.name}"]`);
+      if (alreadyExists) continue;
+
+      try {
+        const pokemon = await fetchPokemon(entry.url);
+        createPokemonCard(pokemon);
+      } catch (err) {
+        console.error("Error fetching:", entry.name, err);
+      }
+    }
+
+    currentIndex += batchSize;
+    isLoading = false;
+  }
+
+  async function searchAndLoadFilteredPokemon() {
+    const nameValue = searchInput.value.toLowerCase();
+
+    // Define de qué lista vamos a buscar (tipo o completa)
+    const baseList = currentType ? await fetchPokemonListByType(currentType) : allMetadata;
+
+    // Filtramos solo por nombre
+    const matches = baseList.filter(p => p.name.startsWith(nameValue));
+
+    clearPokedex();
+    currentList = matches;
+    currentIndex = 0;
+    loadNextBatch();
+  }
+
+  function applyFiltersToLoaded() {
+    const searchValue = searchInput.value.toLowerCase();
+    document.querySelectorAll(".pokemon-card-wrapper").forEach((card) => {
+      const name = card.dataset.name;
+      card.style.display = name.includes(searchValue) ? "block" : "none";
+    });
+  }
+
+  // Eventos
+  window.addEventListener("scroll", () => {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+      loadNextBatch();
+    }
+  });
+
+  searchInput.addEventListener("input", async () => {
+    const value = searchInput.value.toLowerCase();
+
+    if (value === "") {
+      // Borrar input → resetear la vista actual pero respetando tipo
+      clearPokedex();
+      currentList = currentType
+        ? await fetchPokemonListByType(currentType)
+        : allMetadata;
+      currentIndex = 0;
+      loadNextBatch();
+    } else {
+      await searchAndLoadFilteredPokemon();
+    }
+  });
+
+  typeFilter.addEventListener("change", async () => {
+    currentType = typeFilter.value;
+    searchInput.value = "";
+    clearPokedex();
+
+    if (currentType === "") {
+      currentList = allMetadata;
+    } else {
+      currentList = await fetchPokemonListByType(currentType);
+    }
+
+    currentIndex = 0;
+    loadNextBatch();
+  });
+
+  // Inicio
+  (async () => {
+    allMetadata = await fetchAllPokemonMetadata();
+    currentList = allMetadata;
+    loadNextBatch();
+  })();
+  function openPokemonModal(imageUrl) {
+  const modalImg = document.getElementById("modalPokemonImg");
+  modalImg.src = imageUrl;
+}
+
+</script>
+
+<!-- Modal para imagen ampliada -->
+<div class="modal fade" id="pokemonModal" tabindex="-1" aria-labelledby="pokemonModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- más grande -->
+    <div class="modal-content bg-transparent border-0 shadow-none text-center">
+      <div class="modal-body p-0">
+        <img id="modalPokemonImg" src="" alt="Pokémon ampliado" style="max-width: 100%; min-width: 350px; height: auto;" />
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+</body>
+</html>

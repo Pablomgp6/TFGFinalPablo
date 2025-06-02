@@ -1,0 +1,320 @@
+<!-- dentro de /frontend/public/indexhtml -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BattleNest - Pokémon Team Builder</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="icon" href="img/logo.png" type="image/png">
+
+</head>
+<body>
+  <!-- Fondo rojo claro detrás del navbar -->
+  <div class="navbar-background"></div>
+
+  <!-- Navbar oscuro -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <!-- Logo que actúa como link al índice -->
+      <a class="navbar-brand" href="/index">
+        <img src="img/logo.png" alt="Logo" width="80" height="80" class="d-inline-block align-text-top">
+      </a>
+
+      <!-- Hamburguesa -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menú central -->
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav nav-center">
+          <li class="nav-item mx-4">
+            <a class="nav-link nav-link-custom" href="/pokedex">Pokedex</a>
+          </li>
+          <li class="nav-item mx-4">
+            <a class="nav-link nav-link-custom" href="/crearEquipo">Creador</a>
+          </li>
+          <li class="nav-item mx-4">
+            <a class="nav-link nav-link-custom" href="/misEquipos">Mis Equipos</a> <!-- Puedes cambiar esto -->
+          </li>
+        </ul>
+      </div>
+
+      <!-- Derecha: Zona dinámica de sesión -->
+<div class="d-flex" id="sessionArea">
+  <!-- Aquí se insertará el botón dinámicamente con JavaScript -->
+</div>
+
+    </div>
+  </nav>
+
+
+
+
+<!-- 1. Bienvenida dinámica -->
+<div class="text-center py-4 bg-white" style="margin-top: 120px;">
+  <h1 id="welcomeMsg" class="titleCreador2">Bienvenido a Battle Nest 👋</h1>
+  <p class="fst-italic text-muted mb-4">Tu historia como entrenador comienza aquí… ¿Estás listo?</p>
+  <p class="fw-semibold mb-2">
+    🐾 Pokémon del día: <a id="pokeDelDia" href="#" class="text-primary text-decoration-none" target="_blank">cargando...</a>
+  </p>
+  <div id="pokeGifContainer" class="mt-3"></div>
+</div>
+
+<!-- 2. Hero Section -->
+<section class="bg-dark text-white text-center py-5" style="background: url('img/bg-hero.jpg') 50% 20% / cover no-repeat;">
+  <div class="container position-relative" style="z-index: 1;">
+    <div style="background-color: rgba(0, 0, 0, 0.5); padding: 2rem; border-radius: 1rem;">
+      <h1 class="display-4 fw-bold text-white">Crea tu equipo de ensueño</h1>
+      <p class="lead text-white">Organiza, personaliza y guarda tus equipos como un verdadero Maestro Pokémon</p>
+      <a href="/crearEquipo" class="btn btn-danger btn-lg mt-3">Comenzar</a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Características principales -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">Características principales</h2>
+    <div class="row g-4 text-center">
+      <div class="col-md-3">
+        <i class="bi bi-tools fs-1 text-danger"></i>
+        <h5 class="mt-3">Editor Visual</h5>
+        <p>Diseña tu equipo con stats, habilidades, EVs/IVs, objetos y movimientos.</p>
+      </div>
+      <div class="col-md-3">
+        <i class="bi bi-book fs-1 text-primary"></i>
+        <h5 class="mt-3">Pokédex interactiva</h5>
+        <p>Consulta información completa y visual de cada Pokémon con filtros por tipo.</p>
+      </div>
+      <div class="col-md-3">
+        <i class="bi bi-cloud-upload fs-1 text-success"></i>
+        <h5 class="mt-3">Guardado de equipos</h5>
+        <p>Asocia tus equipos a tu cuenta y recupéralos en cualquier momento.</p>
+      </div>
+      <div class="col-md-3">
+        <i class="bi bi-speedometer2 fs-1 text-warning"></i>
+        <h5 class="mt-3">Rápido y responsive</h5>
+        <p>Compatible con móviles, tabletas y PC. Sin necesidad de instalar nada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Testimonios / Beneficios -->
+<section class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">Lo que dicen los entrenadores</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card shadow h-100">
+          <div class="card-body">
+            <p class="card-text">"La herramienta perfecta para planear combates competitivos. Me encanta poder personalizar todo".</p>
+            <h6 class="card-subtitle text-muted">- Carlos M.</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow h-100">
+          <div class="card-body">
+            <p class="card-text">"Mucho más intuitivo que otras webs. Uso la Pokédex a diario para repasar los tipos".</p>
+            <h6 class="card-subtitle text-muted">- Elena R.</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow h-100">
+          <div class="card-body">
+            <p class="card-text">"Me ha servido para construir equipos que luego exporto y pruebo en Pokemon showdown. Muy recomendable."</p>
+            <h6 class="card-subtitle text-muted">- Dani P.</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Preguntas frecuentes (FAQ) -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Preguntas frecuentes</h2>
+    <div class="accordion" id="faqAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+            ¿Necesito crear una cuenta para usarlo?
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Puedes consultar la Pokédex sin cuenta, pero para crear y guardar tus equipos necesitas iniciar sesión.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+            ¿Están disponibles todas las generaciones?
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Actualmente solo se incluyen los Pokémon de la sexta generación (ID 650 al 721).
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+            ¿Puedo exportar o compartir mis equipos?
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Sí, puedes exportarlos en formato compatible para pegar en <a href="https://play.pokemonshowdown.com/" target="_blank" style="text-decoration: none;">Pokemon Showdown</a>.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFour">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+            ¿Funciona en el móvil o tablet?
+          </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Por supuesto. La app está diseñada para adaptarse a cualquier tamaño de pantalla.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+<!-- Footer -->
+<footer class="footer text-white py-5">
+  <div class="container">
+    <div class="row text-center align-items-center">
+      <div class="col-md-4 mb-4 mb-md-0 d-flex flex-column justify-content-center align-items-center">
+        <h5>Pokémon Team Builder</h5>
+        <p class="mb-0">&copy; 2025 Todos los derechos reservados.</p>
+      </div>
+
+      <div class="col-md-4 mb-4 mb-md-0 d-flex flex-column justify-content-center align-items-center">
+        
+        <ul class="list-unstyled">
+          <li><a href="#" class="footer-link nav-link-animated">Aviso Legal</a></li>
+          <li><a href="#" class="footer-link nav-link-animated">Política de Privacidad</a></li>
+          <li><a href="#" class="footer-link nav-link-animated">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+        
+        <div>
+          <a href="#" class="me-3 footer-icon"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="me-3 footer-icon"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="footer-icon"><i class="bi bi-tiktok"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  const sessionArea = document.getElementById('sessionArea');
+  const sessionUser = localStorage.getItem("sessionUser");
+
+  if (sessionUser) {
+    // Usuario logueado → mostrar botón "Cerrar sesión"
+    const logoutBtn = document.createElement("button");
+    logoutBtn.className = "btn btn-danger";
+    logoutBtn.textContent = "Cerrar sesión";
+
+    logoutBtn.onclick = () => {
+      localStorage.removeItem("sessionUser");
+      localStorage.removeItem("sessionEmail");
+      window.location.href = "/login";
+    };
+
+    sessionArea.appendChild(logoutBtn);
+  } else {
+    // Usuario NO logueado → mostrar "Iniciar sesión"
+    const loginLink = document.createElement("a");
+    loginLink.href = "/login";
+    loginLink.className = "btn btn-danger";
+    loginLink.textContent = "Iniciar sesión";
+
+    sessionArea.appendChild(loginLink);
+  }
+</script>
+
+<script>
+  // Saludo personalizado
+  
+  const welcomeMsg = document.getElementById("welcomeMsg");
+  if (sessionUser) {
+    welcomeMsg.textContent = `¡Hola, ${sessionUser}! Prepárate para crear tu próximo equipo ⚔️`;
+  }
+
+  // Mostrar siempre el mismo Pokémon por día
+  const today = new Date().toISOString().split("T")[0]; // formato 'YYYY-MM-DD'
+  const storedData = JSON.parse(localStorage.getItem("pokemonDelDia"));
+
+  if (storedData && storedData.date === today) {
+    mostrarPokemonDelDia(storedData.data);
+  } else {
+    const randomId = Math.floor(Math.random() * 905) + 1;
+    fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`)
+      .then(res => res.json())
+      .then(data => {
+        localStorage.setItem("pokemonDelDia", JSON.stringify({ date: today, data }));
+        mostrarPokemonDelDia(data);
+      })
+      .catch(() => {
+        document.getElementById("pokeDelDia").textContent = "No disponible";
+      });
+  }
+
+  function mostrarPokemonDelDia(data) {
+    const name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+    const pokeDelDia = document.getElementById("pokeDelDia");
+    const pokeGifContainer = document.getElementById("pokeGifContainer");
+
+    pokeDelDia.textContent = name;
+    pokeDelDia.href = `https://www.pokemon.com/es/pokedex/${data.name}`;
+
+    const img = document.createElement("img");
+    img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${data.id}.gif`;
+    img.alt = name;
+    img.style.width = "96px";
+    img.style.height = "96px";
+    img.style.imageRendering = "pixelated";
+
+    pokeGifContainer.innerHTML = "";
+    pokeGifContainer.appendChild(img);
+  }
+</script>
+
+
+
+</body>
+</html>

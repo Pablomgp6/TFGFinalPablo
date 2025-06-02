@@ -1,0 +1,118 @@
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/appsettings.Development.json
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/appsettings.json
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/backend.exe
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/backend.deps.json
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/backend.runtimeconfig.json
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/backend.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/backend.pdb
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/DnsClient.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/Microsoft.AspNetCore.OpenApi.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/Microsoft.OpenApi.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/MongoDB.Bson.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/MongoDB.Driver.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/SharpCompress.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/Snappier.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/bin/Debug/net8.0/ZstdSharp.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.csproj.AssemblyReference.cache
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.AssemblyInfoInputs.cache
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.AssemblyInfo.cs
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.csproj.CoreCompileInputs.cache
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.MvcApplicationPartsAssemblyInfo.cs
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.MvcApplicationPartsAssemblyInfo.cache
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/staticwebassets.build.json
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/staticwebassets.development.json
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/staticwebassets/msbuild.backend.Microsoft.AspNetCore.StaticWebAssets.props
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/staticwebassets/msbuild.build.backend.props
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.backend.props
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.backend.props
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/staticwebassets.pack.json
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/scopedcss/bundle/backend.styles.css
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.csproj.Up2Date
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/refint/backend.dll
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.pdb
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/backend.genruntimeconfig.cache
+C:/Users/Usuario/OneDrive/Documents/TFG DAM/backend/obj/Debug/net8.0/ref/backend.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/appsettings.Development.json
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/appsettings.json
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/backend.exe
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/backend.deps.json
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/backend.runtimeconfig.json
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/backend.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/backend.pdb
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/DnsClient.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/Microsoft.AspNetCore.OpenApi.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/Microsoft.OpenApi.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/MongoDB.Bson.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/MongoDB.Driver.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/SharpCompress.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/Snappier.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+C:/Users/pmguerra/Desktop/tfg/backend/bin/Debug/net8.0/ZstdSharp.dll
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.csproj.AssemblyReference.cache
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.AssemblyInfoInputs.cache
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.AssemblyInfo.cs
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.csproj.CoreCompileInputs.cache
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.MvcApplicationPartsAssemblyInfo.cs
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.MvcApplicationPartsAssemblyInfo.cache
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.sourcelink.json
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/staticwebassets.build.json
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/staticwebassets.development.json
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/staticwebassets/msbuild.backend.Microsoft.AspNetCore.StaticWebAssets.props
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/staticwebassets/msbuild.build.backend.props
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.backend.props
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.backend.props
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/staticwebassets.pack.json
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/scopedcss/bundle/backend.styles.css
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.csproj.Up2Date
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.dll
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/refint/backend.dll
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.pdb
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/backend.genruntimeconfig.cache
+C:/Users/pmguerra/Desktop/tfg/backend/obj/Debug/net8.0/ref/backend.dll
+/home/ubuntu/backend/bin/Debug/net8.0/appsettings.Development.json
+/home/ubuntu/backend/bin/Debug/net8.0/appsettings.json
+/home/ubuntu/backend/bin/Debug/net8.0/backend
+/home/ubuntu/backend/bin/Debug/net8.0/backend.deps.json
+/home/ubuntu/backend/bin/Debug/net8.0/backend.runtimeconfig.json
+/home/ubuntu/backend/bin/Debug/net8.0/backend.dll
+/home/ubuntu/backend/bin/Debug/net8.0/backend.pdb
+/home/ubuntu/backend/bin/Debug/net8.0/DnsClient.dll
+/home/ubuntu/backend/bin/Debug/net8.0/Microsoft.AspNetCore.OpenApi.dll
+/home/ubuntu/backend/bin/Debug/net8.0/Microsoft.OpenApi.dll
+/home/ubuntu/backend/bin/Debug/net8.0/MongoDB.Bson.dll
+/home/ubuntu/backend/bin/Debug/net8.0/MongoDB.Driver.dll
+/home/ubuntu/backend/bin/Debug/net8.0/SharpCompress.dll
+/home/ubuntu/backend/bin/Debug/net8.0/Snappier.dll
+/home/ubuntu/backend/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
+/home/ubuntu/backend/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/ubuntu/backend/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/home/ubuntu/backend/bin/Debug/net8.0/ZstdSharp.dll
+/home/ubuntu/backend/obj/Debug/net8.0/backend.csproj.AssemblyReference.cache
+/home/ubuntu/backend/obj/Debug/net8.0/backend.GeneratedMSBuildEditorConfig.editorconfig
+/home/ubuntu/backend/obj/Debug/net8.0/backend.AssemblyInfoInputs.cache
+/home/ubuntu/backend/obj/Debug/net8.0/backend.AssemblyInfo.cs
+/home/ubuntu/backend/obj/Debug/net8.0/backend.csproj.CoreCompileInputs.cache
+/home/ubuntu/backend/obj/Debug/net8.0/backend.MvcApplicationPartsAssemblyInfo.cs
+/home/ubuntu/backend/obj/Debug/net8.0/backend.MvcApplicationPartsAssemblyInfo.cache
+/home/ubuntu/backend/obj/Debug/net8.0/staticwebassets.build.json
+/home/ubuntu/backend/obj/Debug/net8.0/staticwebassets.development.json
+/home/ubuntu/backend/obj/Debug/net8.0/staticwebassets/msbuild.backend.Microsoft.AspNetCore.StaticWebAssets.props
+/home/ubuntu/backend/obj/Debug/net8.0/staticwebassets/msbuild.build.backend.props
+/home/ubuntu/backend/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.backend.props
+/home/ubuntu/backend/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.backend.props
+/home/ubuntu/backend/obj/Debug/net8.0/staticwebassets.pack.json
+/home/ubuntu/backend/obj/Debug/net8.0/scopedcss/bundle/backend.styles.css
+/home/ubuntu/backend/obj/Debug/net8.0/backend.csproj.CopyComplete
+/home/ubuntu/backend/obj/Debug/net8.0/backend.dll
+/home/ubuntu/backend/obj/Debug/net8.0/refint/backend.dll
+/home/ubuntu/backend/obj/Debug/net8.0/backend.pdb
+/home/ubuntu/backend/obj/Debug/net8.0/backend.genruntimeconfig.cache
+/home/ubuntu/backend/obj/Debug/net8.0/ref/backend.dll

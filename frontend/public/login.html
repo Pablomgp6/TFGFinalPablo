@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesión</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" href="img/logo.png" type="image/png" />
+  </head>
+  <body class="login-body">
+    <div
+      class="login-container d-flex align-items-center justify-content-center"
+    >
+      <div class="login-card p-5 shadow">
+        <h2 class="text-center mb-4">Pokémon Team Builder</h2>
+
+        <form id="loginForm">
+          <!-- Email (siempre visible) -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="ejemplo@correo.com"
+              required
+            />
+          </div>
+
+          <!-- Nombre de usuario (solo al registrar) -->
+          <div class="mb-3 d-none" id="usernameField">
+            <label for="username" class="form-label">Nombre de usuario</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              placeholder="Tu nombre en la aplicación"
+            />
+          </div>
+
+          <!-- Contraseña -->
+          <div class="mb-4">
+            <label for="password" class="form-label">Contraseña</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              placeholder="Contraseña"
+              required
+            />
+          </div>
+
+          <div class="d-grid gap-3">
+            <button type="submit" class="btn btn-dark btn-lg login-btn">
+              Iniciar sesión
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-dark btn-lg"
+              id="toggleRegister"
+            >
+              Crear cuenta nueva
+            </button>
+            <a href="/index" class="btn btn-danger btn-lg"
+              >Volver al índice</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Modal de error -->
+    <div
+      class="modal fade"
+      id="errorModal"
+      tabindex="-1"
+      aria-labelledby="errorModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-danger">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="errorModalLabel">Error</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body" id="errorModalMessage">
+            <!-- Aquí se insertará el mensaje de error -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const toggleBtn = document.getElementById("toggleRegister");
+      const form = document.getElementById("loginForm");
+      const usernameField = document.getElementById("usernameField");
+      const loginBtn = form.querySelector(".login-btn");
+
+      let isRegistering = false;
+
+      toggleBtn?.addEventListener("click", () => {
+        isRegistering = !isRegistering;
+
+        usernameField.classList.toggle("d-none");
+
+        loginBtn.textContent = isRegistering
+          ? "Crear cuenta"
+          : "Iniciar sesión";
+        toggleBtn.textContent = isRegistering
+          ? "Ya tengo una cuenta"
+          : "Crear cuenta nueva";
+      });
+
+      function showErrorModal() {
+        const mensaje = "Usuario o contraseña incorrecto. Prueba otra vez";
+        document.getElementById("errorModalMessage").textContent = mensaje;
+        const modal = new bootstrap.Modal(
+          document.getElementById("errorModal")
+        );
+        modal.show();
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const username = document.getElementById("username")?.value.trim();
+
+        // Validación rápida en cliente
+        if (!email || !password || (isRegistering && !username)) {
+          showErrorModal("Por favor, completa todos los campos.");
+          return;
+        }
+
+        const endpoint = isRegistering ? "auth/register" : "auth/login";
+        const payload = isRegistering
+          ? { email, password, username }
+          : { email, password };
+
+        try {
+          const res = await fetch(`/api/${endpoint}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          const responseData = await res.json();
+
+          if (!res.ok) {
+            throw new Error(
+              typeof responseData === "string"
+                ? responseData
+                : "Error en el servidor."
+            );
+          }
+
+          // ✔️ Guardar datos en localStorage (asegurando email y username)
+          localStorage.setItem(
+            "sessionUser",
+            responseData.username || username || ""
+          );
+          localStorage.setItem(
+            "sessionEmail",
+            responseData.email || email || ""
+          );
+
+          // Redirigir al índice
+          window.location.href = "/index";
+        } catch (error) {
+          console.error("Error en login:", error);
+          showErrorModal(error.message || "Ocurrió un error inesperado.");
+        }
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

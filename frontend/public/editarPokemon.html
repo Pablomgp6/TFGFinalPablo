@@ -1,0 +1,1575 @@
+<!-- dentro de /frontend/public/indehtml -->
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Actualizar Pokemon - Pokémon Team Builder</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link rel="icon" href="img/logo.png" type="image/png" />
+  </head>
+  <body>
+    <!-- Navbar oscuro -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <!-- Logo que actúa como link al índice -->
+        <a class="navbar-brand" href="/index">
+          <img
+            src="img/logo.png"
+            alt="Logo"
+            width="80"
+            height="80"
+            class="d-inline-block align-text-top"
+          />
+        </a>
+
+        <!-- Hamburguesa -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menú central -->
+        <div
+          class="collapse navbar-collapse justify-content-center"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav nav-center">
+            <li class="nav-item mx-4">
+              <a class="nav-link nav-link-custom" href="/pokedex"
+                >Pokedex</a
+              >
+            </li>
+            <li class="nav-item mx-4">
+              <a class="nav-link nav-link-custom" href="/crearEquipo"
+                >Creador</a
+              >
+            </li>
+            
+            <li class="nav-item mx-4">
+              <a class="nav-link nav-link-custom" href="/misEquipos"
+                >Mis Equipos</a
+              >
+              <!-- Puedes cambiar esto -->
+            </li>
+          </ul>
+        </div>
+
+        <!-- Derecha: Zona dinámica de sesión -->
+        <div class="d-flex" id="sessionArea">
+          <!-- Aquí se insertará el botón dinámicamente con JavaScript -->
+        </div>
+      </div>
+    </nav>
+
+    <h1
+      class="text-center mt-3 mb-1 navbar-spacing titleCreador"
+      style="margin-top: 10px; margin-bottom: 5px !important"
+    >
+      Actualizar Pokémon
+    </h1>
+
+    <div class="container mb-3 d-flex justify-content-center">
+      <div class="d-flex flex-wrap gap-2" id="pokemonTabs">
+        <!-- Pestañas de Pokémon -->
+      </div>
+    </div>
+
+    <div class="container d-flex justify-content-center">
+      <div class="w-100" style="max-width: 1000px">
+        <div id="formsContainer">
+          <!-- Formularios dinámicos -->
+        </div>
+        <div class="text-center pb-3">
+          <button class="btn btn-primary" id="guardarEquipo">
+            Actualizar Pokémon
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-white py-5">
+      <div class="container">
+        <div class="row text-center align-items-center">
+          <div
+            class="col-md-4 mb-4 mb-md-0 d-flex flex-column justify-content-center align-items-center"
+          >
+            <h5>Pokémon Team Builder</h5>
+            <p class="mb-0">&copy; 2025 Todos los derechos reservados.</p>
+          </div>
+
+          <div
+            class="col-md-4 mb-4 mb-md-0 d-flex flex-column justify-content-center align-items-center"
+          >
+            <ul class="list-unstyled">
+              <li>
+                <a href="#" class="footer-link nav-link-animated"
+                  >Aviso Legal</a
+                >
+              </li>
+              <li>
+                <a href="#" class="footer-link nav-link-animated"
+                  >Política de Privacidad</a
+                >
+              </li>
+              <li>
+                <a href="#" class="footer-link nav-link-animated">Contacto</a>
+              </li>
+            </ul>
+          </div>
+
+          <div
+            class="col-md-4 d-flex flex-column justify-content-center align-items-center"
+          >
+            <div>
+              <a href="#" class="me-3 footer-icon"
+                ><i class="bi bi-twitter"></i
+              ></a>
+              <a href="#" class="me-3 footer-icon"
+                ><i class="bi bi-instagram"></i
+              ></a>
+              <a href="#" class="footer-icon"><i class="bi bi-tiktok"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const datos = localStorage.getItem("pokemonAEditar");
+
+        if (!datos) {
+          console.error("No hay datos del Pokémon a editar.");
+          window.location.href = "/misEquipos";
+          return;
+        }
+
+        const { pokemonData, pokemonIndex, teamId } = JSON.parse(datos);
+
+        // Guardamos los datos globales si necesitas luego guardarlos al backend
+        window._pokemonIndex = pokemonIndex;
+        window._teamId = teamId;
+        window._pokemonOriginal = pokemonData;
+
+        // Esperar a que el DOM cargue el formulario dinámico
+        setTimeout(() => {
+          precargarFormulario(pokemonData, 0);
+        }, 500);
+      });
+    </script>
+
+    <script>
+      const MAX_POKEMON = 6;
+      let currentTab = null;
+      let pokemonCount = 0;
+      const statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"];
+      const baseStats = {
+        HP: 56,
+        Atk: 61,
+        Def: 65,
+        SpA: 48,
+        SpD: 45,
+        Spe: 38,
+      };
+      const natureModifiers = {
+        Adamant: { increase: "Atk", decrease: "SpA" },
+        Brave: { increase: "Atk", decrease: "Spe" },
+        Lonely: { increase: "Atk", decrease: "Def" },
+        Naughty: { increase: "Atk", decrease: "SpD" },
+
+        Bold: { increase: "Def", decrease: "Atk" },
+        Impish: { increase: "Def", decrease: "SpA" },
+        Lax: { increase: "Def", decrease: "SpD" },
+        Relaxed: { increase: "Def", decrease: "Spe" },
+
+        Modest: { increase: "SpA", decrease: "Atk" },
+        Mild: { increase: "SpA", decrease: "Def" },
+        Quiet: { increase: "SpA", decrease: "Spe" },
+        Rash: { increase: "SpA", decrease: "SpD" },
+
+        Calm: { increase: "SpD", decrease: "Atk" },
+        Careful: { increase: "SpD", decrease: "SpA" },
+        Gentle: { increase: "SpD", decrease: "Def" },
+        Sassy: { increase: "SpD", decrease: "Spe" },
+
+        Timid: { increase: "Spe", decrease: "Atk" },
+        Hasty: { increase: "Spe", decrease: "Def" },
+        Jolly: { increase: "Spe", decrease: "SpA" },
+        Naive: { increase: "Spe", decrease: "SpD" },
+
+        Bashful: { increase: null, decrease: null },
+        Docile: { increase: null, decrease: null },
+        Hardy: { increase: null, decrease: null },
+        Quirky: { increase: null, decrease: null },
+        Serious: { increase: null, decrease: null },
+      };
+
+      const items = [
+        { nombre: "Abomasite", descripcion: "Mega Evoluciona a Abomasnow." },
+        { nombre: "Absolite", descripcion: "Mega Evoluciona a Absol." },
+        {
+          nombre: "Aerodactylite",
+          descripcion: "Mega Evoluciona a Aerodactyl.",
+        },
+        { nombre: "Aggronite", descripcion: "Mega Evoluciona a Aggron." },
+        {
+          nombre: "Air Balloon",
+          descripcion: "Inmunidad a Tierra hasta ser golpeado.",
+        },
+        { nombre: "Alakazite", descripcion: "Mega Evoluciona a Alakazam." },
+        { nombre: "Altarianite", descripcion: "Mega Evoluciona a Altaria." },
+        { nombre: "Ampharosite", descripcion: "Mega Evoluciona a Ampharos." },
+        {
+          nombre: "Assault Vest",
+          descripcion: "Aumenta Def. Esp. pero bloquea movimientos de estado.",
+        },
+        { nombre: "Audinite", descripcion: "Mega Evoluciona a Audino." },
+        { nombre: "Banettite", descripcion: "Mega Evoluciona a Banette." },
+        { nombre: "Beedrillite", descripcion: "Mega Evoluciona a Beedrill." },
+        { nombre: "Berry Juice", descripcion: "Cura 20 PS (Little Cup)." },
+        {
+          nombre: "Black Sludge",
+          descripcion: "Cura si es tipo Veneno, daña si no.",
+        },
+        {
+          nombre: "Blastoisinite",
+          descripcion: "Mega Evoluciona a Blastoise.",
+        },
+        {
+          nombre: "Charizardite X",
+          descripcion: "Mega Evoluciona a Charizard X.",
+        },
+        {
+          nombre: "Charizardite Y",
+          descripcion: "Mega Evoluciona a Charizard Y.",
+        },
+        {
+          nombre: "Chesto Berry",
+          descripcion: "Despierta al Pokémon dormido.",
+        },
+        {
+          nombre: "Choice Band",
+          descripcion: "Aumenta el Ataque pero bloquea el movimiento.",
+        },
+        {
+          nombre: "Choice Scarf",
+          descripcion: "Aumenta la Velocidad pero bloquea el movimiento.",
+        },
+        {
+          nombre: "Choice Specs",
+          descripcion: "Aumenta el At. Esp. pero bloquea el movimiento.",
+        },
+        { nombre: "Eject Button", descripcion: "Cambia tras recibir daño." },
+        { nombre: "Eject Pack", descripcion: "Cambia si bajan tus stats." },
+        {
+          nombre: "Eviolite",
+          descripcion: "Mejora Defensas si no está completamente evolucionado.",
+        },
+        {
+          nombre: "Expert Belt",
+          descripcion: "Potencia movimientos supereficaces.",
+        },
+        {
+          nombre: "Figy Berry",
+          descripcion: "Cura más PS, puede causar confusión.",
+        },
+        { nombre: "Flame Orb", descripcion: "Quema al portador." },
+        {
+          nombre: "Focus Band",
+          descripcion: "Probabilidad de sobrevivir a KO.",
+        },
+        {
+          nombre: "Focus Sash",
+          descripcion: "Sobrevive con 1 PS si estaba a PS completos.",
+        },
+        { nombre: "Garchompite", descripcion: "Mega Evoluciona a Garchomp." },
+        { nombre: "Gardevoirite", descripcion: "Mega Evoluciona a Gardevoir." },
+        { nombre: "Galladite", descripcion: "Mega Evoluciona a Gallade." },
+        { nombre: "Gengarite", descripcion: "Mega Evoluciona a Gengar." },
+        { nombre: "Glalitite", descripcion: "Mega Evoluciona a Glalie." },
+        { nombre: "Gyaradosite", descripcion: "Mega Evoluciona a Gyarados." },
+
+        { nombre: "Heracronite", descripcion: "Mega Evoluciona a Heracross." },
+        { nombre: "Houndoominite", descripcion: "Mega Evoluciona a Houndoom." },
+        {
+          nombre: "Iron Ball",
+          descripcion: "Baja velocidad y anula inmunidad a Tierra.",
+        },
+        {
+          nombre: "Kangaskhanite",
+          descripcion: "Mega Evoluciona a Kangaskhan.",
+        },
+        { nombre: "Lagging Tail", descripcion: "Obliga a moverse último." },
+        { nombre: "Leftovers", descripcion: "Recupera PS cada turno." },
+        {
+          nombre: "Light Clay",
+          descripcion: "Alarga Pantalla de Luz y Reflejo.",
+        },
+        {
+          nombre: "Life Orb",
+          descripcion: "Potencia los ataques a cambio de PS.",
+        },
+        { nombre: "Lopunnite", descripcion: "Mega Evoluciona a Lopunny." },
+        { nombre: "Lucarionite", descripcion: "Mega Evoluciona a Lucario." },
+        { nombre: "Lum Berry", descripcion: "Cura cualquier estado alterado." },
+        { nombre: "Manectite", descripcion: "Mega Evoluciona a Manectric." },
+        { nombre: "Mawilite", descripcion: "Mega Evoluciona a Mawile." },
+        { nombre: "Medichamite", descripcion: "Mega Evoluciona a Medicham." },
+        {
+          nombre: "Mental Herb",
+          descripcion: "Cura atracción, provocación, etc.",
+        },
+        { nombre: "Metagrossite", descripcion: "Mega Evoluciona a Metagross." },
+        {
+          nombre: "Metronome",
+          descripcion: "Potencia movimientos usados consecutivamente.",
+        },
+        {
+          nombre: "Muscle Band",
+          descripcion: "Aumenta ligeramente los ataques físicos.",
+        },
+        { nombre: "Pidgeotite", descripcion: "Mega Evoluciona a Pidgeot." },
+        { nombre: "Pinsirite", descripcion: "Mega Evoluciona a Pinsir." },
+        {
+          nombre: "Power Herb",
+          descripcion: "Permite usar movimientos de dos turnos sin cargar.",
+        },
+        {
+          nombre: "Quick Claw",
+          descripcion: "Probabilidad de moverse primero.",
+        },
+        {
+          nombre: "Razor Claw",
+          descripcion: "Aumenta críticos. También para evolución de Weavile.",
+        },
+        {
+          nombre: "Red Card",
+          descripcion: "Cambia al atacante tras recibir golpe.",
+        },
+        { nombre: "Rocky Helmet", descripcion: "Daña al contacto físico." },
+        {
+          nombre: "Room Service",
+          descripcion: "Baja Velocidad si hay Espacio Raro.",
+        },
+        { nombre: "Safety Goggles", descripcion: "Inmunidad a polvo y clima." },
+        { nombre: "Sableyeite", descripcion: "Mega Evoluciona a Sableye." },
+        { nombre: "Salamencite", descripcion: "Mega Evoluciona a Salamence." },
+        { nombre: "Scizorite", descripcion: "Mega Evoluciona a Scizor." },
+        {
+          nombre: "Scope Lens",
+          descripcion: "Aumenta probabilidad de crítico.",
+        },
+        { nombre: "Sharpedonite", descripcion: "Mega Evoluciona a Sharpedo." },
+        { nombre: "Sitrus Berry", descripcion: "Cura PS al bajar del 50%." },
+        { nombre: "Slowbronite", descripcion: "Mega Evoluciona a Slowbro." },
+        { nombre: "Steelixite", descripcion: "Mega Evoluciona a Steelix." },
+        { nombre: "Swampertite", descripcion: "Mega Evoluciona a Swampert." },
+        {
+          nombre: "Terrain Extender",
+          descripcion: "Aumenta duración de campos.",
+        },
+        {
+          nombre: "Throat Spray",
+          descripcion: "Sube At. Esp. tras ataque de sonido.",
+        },
+        { nombre: "Toxic Orb", descripcion: "Envenena al portador." },
+        { nombre: "Tyranitarite", descripcion: "Mega Evoluciona a Tyranitar." },
+        { nombre: "Venusaurite", descripcion: "Mega Evoluciona a Venusaur." },
+        {
+          nombre: "Weakness Policy",
+          descripcion: "Sube Atk y Atk Esp al recibir ataque supereficaz.",
+        },
+        {
+          nombre: "White Herb",
+          descripcion: "Restaura bajadas de stats una vez.",
+        },
+        {
+          nombre: "Wise Glasses",
+          descripcion: "Aumenta ligeramente los ataques especiales.",
+        },
+      ];
+
+      const usedIndexes = new Set();
+
+      document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+          const tabContainer = document.getElementById("pokemonTabs");
+          const formsContainer = document.getElementById("formsContainer");
+
+          function getBarColor(value) {
+            if (value < 50) return "#ff4d4d";
+            if (value < 80) return "#ff9933";
+            if (value < 100) return "#cccc00";
+            if (value < 120) return "#99cc00";
+            return "#33cc33";
+          }
+
+          function calcularStat(base, ev, iv, stat, index) {
+            let naturaleza = document.getElementById(
+              `nature-select-${index}`
+            )?.value;
+            let multiplicador = 1;
+
+            if (naturaleza && natureModifiers[naturaleza]) {
+              const mod = natureModifiers[naturaleza];
+              if (mod.increase === stat) multiplicador = 1.1;
+              else if (mod.decrease === stat) multiplicador = 0.9;
+            }
+
+            const baseStat = Math.floor(
+              ((2 * base + iv + Math.floor(ev / 4)) * 100) / 100 + 5
+            );
+            return Math.floor(baseStat * multiplicador);
+          }
+
+          function updateEVTotal(index) {
+            let total = 0;
+            statNames.forEach((stat) => {
+              const val =
+                parseInt(
+                  document.getElementById(`ev-${stat}-val-${index}`).value
+                ) || 0;
+              total += val;
+            });
+            const restante = Math.max(0, 508 - total);
+            document.getElementById(`evRemaining-${index}`).textContent =
+              restante;
+
+            statNames.forEach((stat) => {
+              const input = document.getElementById(`ev-${stat}-val-${index}`);
+              const slider = document.getElementById(`ev-${stat}-${index}`);
+              const current = parseInt(input.value);
+              if (total > 508 && current > 0) {
+                const diff = total - 508;
+                const newVal = Math.max(0, current - diff);
+                input.value = newVal;
+                slider.value = newVal;
+              }
+            });
+          }
+
+          function crearStatsHTML(index) {
+            return statNames
+              .map((stat) => {
+                const base = baseStats[stat];
+                const color = getBarColor(base);
+                return `
+          <div class="row align-items-center mb-4">
+            <div class="col-3">
+              <div class="stat-base-wrapper">
+                <span>${stat}</span>
+                <span>${base}</span>
+                <div class="stat-bar-container">
+                  <div class="stat-bar" style="width: ${Math.min(
+                    base * 1.2,
+                    150
+                  )}px; background-color: ${color};"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <input type="range" min="0" max="252" value="0" class="form-range" id="ev-${stat}-${index}">
+              <input type="number" class="form-control form-control-sm stat-input mx-auto" id="ev-${stat}-val-${index}" value="0" min="0" max="252">
+            </div>
+            <div class="col-3">
+              <input type="range" min="0" max="31" value="31" class="form-range" id="iv-${stat}-${index}">
+              <input type="number" class="form-control form-control-sm stat-input mx-auto" id="iv-${stat}-val-${index}" value="31" min="0" max="31">
+            </div>
+            <div class="col-3">
+              <div id="result-${stat}-${index}">${calcularStat(
+                  base,
+                  0,
+                  31,
+                  stat,
+                  index
+                )}
+            </div>
+            </div>
+          </div>
+        `;
+              })
+              .join("");
+          }
+
+          function bindStatEvents(index) {
+            statNames.forEach((stat) => {
+              const evSlider = document.getElementById(`ev-${stat}-${index}`);
+              const evInput = document.getElementById(
+                `ev-${stat}-val-${index}`
+              );
+              const ivSlider = document.getElementById(`iv-${stat}-${index}`);
+              const ivInput = document.getElementById(
+                `iv-${stat}-val-${index}`
+              );
+
+              const update = () => {
+                const ev = parseInt(evSlider.value);
+                const iv = parseInt(ivInput.value);
+                document.getElementById(`result-${stat}-${index}`).textContent =
+                  calcularStat(baseStats[stat], ev, iv, stat, index);
+              };
+
+              evSlider.addEventListener("input", () => {
+                evInput.value = evSlider.value;
+                updateEVTotal(index);
+                update();
+              });
+              evInput.addEventListener("input", () => {
+                let val = Math.max(
+                  0,
+                  Math.min(252, parseInt(evInput.value) || 0)
+                );
+                evInput.value = val;
+                evSlider.value = val;
+                updateEVTotal(index);
+                update();
+              });
+
+              ivSlider.addEventListener("input", () => {
+                ivInput.value = ivSlider.value;
+                update();
+              });
+              ivInput.addEventListener("input", () => {
+                let val = Math.max(
+                  0,
+                  Math.min(31, parseInt(ivInput.value) || 0)
+                );
+                ivInput.value = val;
+                ivSlider.value = val;
+                update();
+              });
+
+              update();
+            });
+            const natureSelect = document.getElementById(
+              `nature-select-${index}`
+            );
+            if (natureSelect) {
+              natureSelect.addEventListener("change", () => {
+                statNames.forEach((stat) => {
+                  const ev = parseInt(
+                    document.getElementById(`ev-${stat}-${index}`).value
+                  );
+                  const iv = parseInt(
+                    document.getElementById(`iv-${stat}-${index}`).value
+                  );
+                  document.getElementById(
+                    `result-${stat}-${index}`
+                  ).textContent = calcularStat(
+                    baseStats[stat],
+                    ev,
+                    iv,
+                    stat,
+                    index
+                  );
+                });
+              });
+            }
+          }
+          async function obtenerPokemonGen6() {
+            const pokemonList = [];
+            for (let id = 650; id <= 721; id++) {
+              const response = await fetch(
+                `https://pokeapi.co/api/v2/pokemon/${id}/`
+              );
+              const data = await response.json();
+              const nombre =
+                data.name.charAt(0).toUpperCase() + data.name.slice(1);
+              pokemonList.push({ id, nombre });
+            }
+            return pokemonList;
+          }
+
+          function crearFormulario(index) {
+            const form = document.createElement("div");
+            form.className = `pokemon-form fade-card${
+              currentTab === null ? " active" : ""
+            }`;
+            form.id = `pokemonForm-${index}`;
+
+            const selectOptions = Array.from({ length: 72 }, (_, i) => {
+              const id = 650 + i;
+              return `<option value="${id}">Pokémon ${id}</option>`;
+            }).join("");
+
+            form.innerHTML = `
+                    <h4 class="text-center mb-4">Pokémon </h4>
+                    <div class="text-center mb-4">
+                      <img id="pokemon-image-${index}" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/650.gif" alt="Pokemon Sprite" class="img-fluid mb-2" style="max-height: 120px;">
+                      <label class="stat-label">Nombre del Pokémon</label>
+                      <select id="pokemon-select-${index}" class="form-select w-75 mx-auto">${selectOptions}</select>
+                    </div>
+                    <div class="mb-3 text-center">
+                  <label class="stat-label">Objeto</label>
+                  <select id="item-select-${index}" class="form-select w-75 mx-auto">
+                  <option value="" disabled selected>Selecciona un objeto</option>
+                <option value="Abomasite">Abomasite – Mega Evoluciona a Abomasnow.</option>
+                <option value="Absolite">Absolite – Mega Evoluciona a Absol.</option>
+                <option value="Aerodactylite">Aerodactylite – Mega Evoluciona a Aerodactyl.</option>
+                <option value="Aggronite">Aggronite – Mega Evoluciona a Aggron.</option>
+                <option value="Air Balloon">Air Balloon – Inmunidad a Tierra hasta ser golpeado.</option>
+                <option value="Alakazite">Alakazite – Mega Evoluciona a Alakazam.</option>
+                <option value="Altarianite">Altarianite – Mega Evoluciona a Altaria.</option>
+                <option value="Ampharosite">Ampharosite – Mega Evoluciona a Ampharos.</option>
+                <option value="Assault Vest">Assault Vest – Aumenta Def. Esp. pero bloquea movimientos de estado.</option>
+                <option value="Audinite">Audinite – Mega Evoluciona a Audino.</option>
+                <option value="Banettite">Banettite – Mega Evoluciona a Banette.</option>
+                <option value="Beedrillite">Beedrillite – Mega Evoluciona a Beedrill.</option>
+                <option value="Berry Juice">Berry Juice – Cura 20 PS (Little Cup).</option>
+                <option value="Black Sludge">Black Sludge – Cura si es tipo Veneno, daña si no.</option>
+                <option value="Blastoisinite">Blastoisinite – Mega Evoluciona a Blastoise.</option>
+                <option value="Charizardite X">Charizardite X – Mega Evoluciona a Charizard X.</option>
+                <option value="Charizardite Y">Charizardite Y – Mega Evoluciona a Charizard Y.</option>
+                <option value="Chesto Berry">Chesto Berry – Despierta al Pokémon dormido.</option>
+                <option value="Choice Band">Choice Band – Aumenta el Ataque pero bloquea el movimiento.</option>
+                <option value="Choice Scarf">Choice Scarf – Aumenta la Velocidad pero bloquea el movimiento.</option>
+                <option value="Choice Specs">Choice Specs – Aumenta el At. Esp. pero bloquea el movimiento.</option>
+                <option value="Eject Button">Eject Button – Cambia tras recibir daño.</option>
+                <option value="Eject Pack">Eject Pack – Cambia si bajan tus stats.</option>
+                <option value="Eviolite">Eviolite – Mejora Defensas si no está completamente evolucionado.</option>
+                <option value="Expert Belt">Expert Belt – Potencia movimientos supereficaces.</option>
+                <option value="Figy Berry">Figy Berry – Cura más PS, puede causar confusión.</option>
+                <option value="Flame Orb">Flame Orb – Quema al portador.</option>
+                <option value="Focus Band">Focus Band – Probabilidad de sobrevivir a KO.</option>
+                <option value="Focus Sash">Focus Sash – Sobrevive con 1 PS si estaba a PS completos.</option>
+                <option value="Garchompite">Garchompite – Mega Evoluciona a Garchomp.</option>
+                <option value="Gardevoirite">Gardevoirite – Mega Evoluciona a Gardevoir.</option>
+                <option value="Galladite">Galladite – Mega Evoluciona a Gallade.</option>
+                <option value="Gengarite">Gengarite – Mega Evoluciona a Gengar.</option>
+                <option value="Glalitite">Glalitite – Mega Evoluciona a Glalie.</option>
+                <option value="Gyaradosite">Gyaradosite – Mega Evoluciona a Gyarados.</option>
+                <option value="Heracronite">Heracronite – Mega Evoluciona a Heracross.</option>
+                <option value="Houndoominite">Houndoominite – Mega Evoluciona a Houndoom.</option>
+                <option value="Iron Ball">Iron Ball – Baja velocidad y anula inmunidad a Tierra.</option>
+                <option value="Kangaskhanite">Kangaskhanite – Mega Evoluciona a Kangaskhan.</option>
+                <option value="Lagging Tail">Lagging Tail – Obliga a moverse último.</option>
+                <option value="Leftovers">Leftovers – Recupera PS cada turno.</option>
+                <option value="Light Clay">Light Clay – Alarga Pantalla de Luz y Reflejo.</option>
+                <option value="Life Orb">Life Orb – Potencia los ataques a cambio de PS.</option>
+                <option value="Lopunnite">Lopunnite – Mega Evoluciona a Lopunny.</option>
+                <option value="Lucarionite">Lucarionite – Mega Evoluciona a Lucario.</option>
+                <option value="Lum Berry">Lum Berry – Cura cualquier estado alterado.</option>
+                <option value="Manectite">Manectite – Mega Evoluciona a Manectric.</option>
+                <option value="Mawilite">Mawilite – Mega Evoluciona a Mawile.</option>
+                <option value="Medichamite">Medichamite – Mega Evoluciona a Medicham.</option>
+                <option value="Mental Herb">Mental Herb – Cura atracción, provocación, etc.</option>
+                <option value="Metagrossite">Metagrossite – Mega Evoluciona a Metagross.</option>
+                <option value="Metronome">Metronome – Potencia movimientos usados consecutivamente.</option>
+                <option value="Muscle Band">Muscle Band – Aumenta ligeramente los ataques físicos.</option>
+                <option value="Pidgeotite">Pidgeotite – Mega Evoluciona a Pidgeot.</option>
+                <option value="Pinsirite">Pinsirite – Mega Evoluciona a Pinsir.</option>
+                <option value="Power Herb">Power Herb – Permite usar movimientos de dos turnos sin cargar.</option>
+                <option value="Quick Claw">Quick Claw – Probabilidad de moverse primero.</option>
+                <option value="Razor Claw">Razor Claw – Aumenta críticos. También para evolución de Weavile.</option>
+                <option value="Red Card">Red Card – Cambia al atacante tras recibir golpe.</option>
+                <option value="Rocky Helmet">Rocky Helmet – Daña al contacto físico.</option>
+                <option value="Room Service">Room Service – Baja Velocidad si hay Espacio Raro.</option>
+                <option value="Safety Goggles">Safety Goggles – Inmunidad a polvo y clima.</option>
+                <option value="Sableyeite">Sableyeite – Mega Evoluciona a Sableye.</option>
+                <option value="Salamencite">Salamencite – Mega Evoluciona a Salamence.</option>
+                <option value="Scizorite">Scizorite – Mega Evoluciona a Scizor.</option>
+                <option value="Scope Lens">Scope Lens – Aumenta probabilidad de crítico.</option>
+                <option value="Sharpedonite">Sharpedonite – Mega Evoluciona a Sharpedo.</option>
+                <option value="Sitrus Berry">Sitrus Berry – Cura PS al bajar del 50%.</option>
+                <option value="Slowbronite">Slowbronite – Mega Evoluciona a Slowbro.</option>
+                <option value="Steelixite">Steelixite – Mega Evoluciona a Steelix.</option>
+                <option value="Swampertite">Swampertite – Mega Evoluciona a Swampert.</option>
+                <option value="Terrain Extender">Terrain Extender – Aumenta duración de campos.</option>
+                <option value="Throat Spray">Throat Spray – Sube At. Esp. tras ataque de sonido.</option>
+                <option value="Toxic Orb">Toxic Orb – Envenena al portador.</option>
+                <option value="Tyranitarite">Tyranitarite – Mega Evoluciona a Tyranitar.</option>
+                <option value="Venusaurite">Venusaurite – Mega Evoluciona a Venusaur.</option>
+                <option value="Weakness Policy">Weakness Policy – Sube Atk y Atk Esp al recibir ataque supereficaz.</option>
+                <option value="White Herb">White Herb – Restaura bajadas de stats una vez.</option>
+                <option value="Wise Glasses">Wise Glasses – Aumenta ligeramente los ataques especiales.</option>
+
+                </select>
+
+                  </select>
+                </div>
+
+                    <div class="mb-3 text-center">
+                  <label class="stat-label">Habilidad</label>
+                  <select id="ability-select-${index}" class="form-select w-75 mx-auto">
+                  <option value="overgrow">Overgrow</option>
+                  <option value="bulletproof">Bulletproof (Oculta)</option>
+                </select>
+
+                </div>
+
+                    <div class="mb-3 text-center">
+                      <label class="stat-label">Naturaleza</label>
+                      <select class="form-select w-75 mx-auto" id="nature-select-${index}">
+
+                  <option value="Adamant">Adamant (+Atk, -SpA)</option>
+                <option value="Brave">Brave (+Atk, -Spe)</option>
+                <option value="Lonely">Lonely (+Atk, -Def)</option>
+                <option value="Naughty">Naughty (+Atk, -SpD)</option>
+
+                <option value="Bold">Bold (+Def, -Atk)</option>
+                <option value="Impish">Impish (+Def, -SpA)</option>
+                <option value="Lax">Lax (+Def, -SpD)</option>
+                <option value="Relaxed">Relaxed (+Def, -Spe)</option>
+
+                <option value="Modest">Modest (+SpA, -Atk)</option>
+                <option value="Mild">Mild (+SpA, -Def)</option>
+                <option value="Quiet">Quiet (+SpA, -Spe)</option>
+                <option value="Rash">Rash (+SpA, -SpD)</option>
+
+                <option value="Calm">Calm (+SpD, -Atk)</option>
+                <option value="Careful">Careful (+SpD, -SpA)</option>
+                <option value="Gentle">Gentle (+SpD, -Def)</option>
+                <option value="Sassy">Sassy (+SpD, -Spe)</option>
+
+                <option value="Timid">Timid (+Spe, -Atk)</option>
+                <option value="Hasty">Hasty (+Spe, -Def)</option>
+                <option value="Jolly">Jolly (+Spe, -SpA)</option>
+                <option value="Naive">Naive (+Spe, -SpD)</option>
+
+                <option value="Bashful">Bashful (Neutral)</option>
+                <option value="Docile">Docile (Neutral)</option>
+                <option value="Hardy">Hardy (Neutral)</option>
+                <option value="Quirky">Quirky (Neutral)</option>
+                <option value="Serious">Serious (Neutral)</option>
+
+                </select>
+
+                    </div>
+
+                    <div class="row g-2 justify-content-center">
+                  ${[1, 2, 3, 4]
+                    .map((slot) => {
+                      const chespinMoves = [
+                        {
+                          value: "seed-bomb",
+                          label:
+                            "Seed Bomb | grass | physical | Pow: 80 | Acc: 100",
+                        },
+                        {
+                          value: "leech-seed",
+                          label:
+                            "Leech Seed | grass | status | Pow: — | Acc: 90",
+                        },
+                        {
+                          value: "spiky-shield",
+                          label:
+                            "Spiky Shield | grass | status | Pow: — | Acc: —",
+                        },
+                        {
+                          value: "wood-hammer",
+                          label:
+                            "Wood Hammer | grass | physical | Pow: 120 | Acc: 100",
+                        },
+                      ];
+
+                      const move = chespinMoves[slot - 1];
+                      return `
+                      <div class="col-6">
+                        <select class="form-select move-select" id="move-select-${index}-${slot}">
+                          <option value="${move.value}" selected>${move.label}</option>
+                        </select>
+                      </div>
+                      `;
+                    })
+                    .join("")}
+                </div>
+
+
+
+                      </div>
+                    </div>
+                    <div class="text-center">
+                      <h5 class="tituloEstadisticas pt-4">Estadísticas del Pokémon</h5>
+                      <div class="row mb-3">
+                        <div class="col-3 fw-bold">Base</div><div class="col-3 fw-bold">EVs</div><div class="col-3 fw-bold">IVs</div><div class="col-3 fw-bold">Total</div>
+                      </div>
+                      <div id="statContainer-${index}">${crearStatsHTML(
+              index
+            )}</div>
+                      <p class="mt-3"><strong>EVs restantes:</strong> <span id="evRemaining-${index}">508</span></p>
+                    </div>
+                  `;
+
+            setTimeout(async () => {
+              bindStatEvents(index);
+
+              const select = document.getElementById(`pokemon-select-${index}`);
+              const image = document.getElementById(`pokemon-image-${index}`);
+
+              // Obtener Pokémon de la Gen 6 y poblar el select
+              const pokemonList = await obtenerPokemonGen6();
+              select.innerHTML = "";
+              pokemonList.forEach((pokemon) => {
+                const option = document.createElement("option");
+                option.value = pokemon.id;
+                option.textContent = `${pokemon.id} - ${pokemon.nombre}`;
+                select.appendChild(option);
+              });
+
+              select.value = "650"; // Inicial por defecto
+              image.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/650.gif`;
+
+              select.addEventListener("change", async () => {
+                const selectedId = select.value;
+                image.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${selectedId}.gif`;
+
+                try {
+                  const res = await fetch(
+                    `https://pokeapi.co/api/v2/pokemon/${selectedId}`
+                  );
+                  const data = await res.json();
+
+                  // Actualizar habilidades
+                  const abilitySelect = document.getElementById(
+                    `ability-select-${index}`
+                  );
+                  abilitySelect.innerHTML = "";
+                  data.abilities.forEach((entry) => {
+                    const abilityName = entry.ability.name;
+                    const isHidden = entry.is_hidden;
+                    const option = document.createElement("option");
+                    option.value = abilityName;
+                    option.textContent =
+                      abilityName.charAt(0).toUpperCase() +
+                      abilityName.slice(1) +
+                      (isHidden ? " (Oculta)" : "");
+                    abilitySelect.appendChild(option);
+                  });
+
+                  // Actualizar stats base
+                  data.stats.forEach((stat) => {
+                    const name = stat.stat.name;
+                    let key = "";
+                    switch (name) {
+                      case "hp":
+                        key = "HP";
+                        break;
+                      case "attack":
+                        key = "Atk";
+                        break;
+                      case "defense":
+                        key = "Def";
+                        break;
+                      case "special-attack":
+                        key = "SpA";
+                        break;
+                      case "special-defense":
+                        key = "SpD";
+                        break;
+                      case "speed":
+                        key = "Spe";
+                        break;
+                    }
+                    if (key && baseStats[key] !== undefined) {
+                      baseStats[key] = stat.base_stat;
+                    }
+                  });
+
+                  // Actualizar panel de stats
+                  document.getElementById(`statContainer-${index}`).innerHTML =
+                    crearStatsHTML(index);
+                  bindStatEvents(index);
+
+                  // =============================
+                  // Cargar movimientos
+                  // =============================
+                  const allMoves = data.moves;
+
+                  // Obtener detalles de los primeros 1000 movimientos
+                  const detailedMoves = await Promise.all(
+                    allMoves.slice(0, 1000).map(async (entry) => {
+                      try {
+                        const res = await fetch(entry.move.url);
+                        const moveData = await res.json();
+                        return {
+                          name: moveData.name,
+                          type: moveData.type.name,
+                          category: moveData.damage_class.name, // physical, special, status
+                          power: moveData.power ?? "—",
+                          accuracy: moveData.accuracy ?? "—",
+                        };
+                      } catch (e) {
+                        return null;
+                      }
+                    })
+                  );
+
+                  const moves = detailedMoves
+                    .filter(Boolean)
+                    .sort((a, b) => a.name.localeCompare(b.name));
+
+                  // Opciones completas
+                  const moveOptions = moves.map((move) => ({
+                    value: move.name,
+                    label: `${move.name} | ${move.type} | ${move.category} | Pow: ${move.power} | Acc: ${move.accuracy}`,
+                  }));
+
+                  // Llenar selects
+                  for (let slot = 1; slot <= 4; slot++) {
+                    const select = document.getElementById(
+                      `move-select-${index}-${slot}`
+                    );
+                    if (!select) continue;
+                    select.innerHTML =
+                      '<option value="">Selecciona un movimiento</option>';
+                    moveOptions.forEach((opt) => {
+                      const option = document.createElement("option");
+                      option.value = opt.value;
+                      option.textContent = opt.label;
+                      select.appendChild(option);
+                    });
+                  }
+
+                  // Función para actualizar dinámicamente las opciones disponibles
+                  function actualizarOpcionesDeMovimientos(index) {
+                    const selects = [
+                      document.getElementById(`move-select-${index}-1`),
+                      document.getElementById(`move-select-${index}-2`),
+                      document.getElementById(`move-select-${index}-3`),
+                      document.getElementById(`move-select-${index}-4`),
+                    ];
+
+                    const seleccionados = selects
+                      .map((s) => s?.value)
+                      .filter((v) => v);
+
+                    selects.forEach((select, i) => {
+                      const valorActual = select.value;
+                      select.innerHTML =
+                        '<option value="">Selecciona un movimiento</option>';
+
+                      moveOptions.forEach((opt) => {
+                        const yaSeleccionado = seleccionados.includes(
+                          opt.value
+                        );
+                        const esEste = opt.value === valorActual;
+
+                        if (!yaSeleccionado || esEste) {
+                          const option = document.createElement("option");
+                          option.value = opt.value;
+                          option.textContent = opt.label;
+                          if (esEste) option.selected = true;
+                          select.appendChild(option);
+                        }
+                      });
+                    });
+                  }
+
+                  // Enlazar evento de actualización a cada select
+                  for (let slot = 1; slot <= 4; slot++) {
+                    const select = document.getElementById(
+                      `move-select-${index}-${slot}`
+                    );
+                    if (select) {
+                      select.addEventListener("change", () =>
+                        actualizarOpcionesDeMovimientos(index)
+                      );
+                    }
+                  }
+
+                  // Ejecutar una vez al inicio para filtrar posibles repes precargados
+                  actualizarOpcionesDeMovimientos(index);
+
+                  const itemSelect = document.getElementById(
+                    `item-select-${index}`
+                  );
+                  if (itemSelect) {
+                    itemSelect.innerHTML =
+                      '<option value="" disabled selected>Selecciona un objeto</option>';
+                    items.forEach((item) => {
+                      const option = document.createElement("option");
+                      option.value = item.nombre;
+                      option.textContent = `${item.nombre} – ${item.descripcion}`;
+                      itemSelect.appendChild(option);
+                    });
+                  }
+
+                  // Rellenar selects
+                  for (let slot = 1; slot <= 4; slot++) {
+                    const moveSelect = document.getElementById(
+                      `move-select-${index}-${slot}`
+                    );
+                    if (!moveSelect) continue;
+                    moveSelect.innerHTML =
+                      '<option value="">Selecciona un movimiento</option>';
+
+                    detailedMoves
+                      .filter(Boolean)
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .forEach((move) => {
+                        const option = document.createElement("option");
+                        option.value = move.name;
+                        option.textContent = `${move.name} | ${move.type} | ${move.category} | Pow: ${move.power} | Acc: ${move.accuracy}`;
+                        moveSelect.appendChild(option);
+                      });
+                  }
+                } catch (err) {
+                  console.error("Error cargando datos del Pokémon", err);
+                }
+              });
+            }, 50);
+
+            return form;
+          }
+
+          function crearPestana(index) {
+            return document.createElement("div"); // devuelve un contenedor vacío
+          }
+
+          function eliminarPestana(index) {
+            document.getElementById(`tab-container-${index}`)?.remove();
+            document.getElementById(`pokemonForm-${index}`)?.remove();
+            usedIndexes.delete(index);
+            pokemonCount--;
+            if (pokemonCount < MAX_POKEMON) {
+              document.getElementById("addPokemonButton").style.display =
+                "inline-block";
+            }
+            const remaining = [...usedIndexes];
+            if (remaining.length) seleccionarPestana(remaining[0]);
+          }
+
+          function seleccionarPestana(index) {
+            document
+              .querySelectorAll(".pokemon-form")
+              .forEach((f) => f.classList.remove("active"));
+            document
+              .getElementById(`pokemonForm-${index}`)
+              .classList.add("active");
+            currentTab = index;
+          }
+
+          function agregarPokemon() {
+            if (pokemonCount >= MAX_POKEMON) return;
+            let index = 0;
+            while (usedIndexes.has(index)) index++;
+            usedIndexes.add(index);
+
+            const tab = crearPestana(index);
+            const form = crearFormulario(index);
+
+            tabContainer.insertBefore(
+              tab,
+              document.getElementById("addPokemonButton")
+            );
+            formsContainer.appendChild(form);
+            seleccionarPestana(index);
+            pokemonCount++;
+
+            if (pokemonCount >= MAX_POKEMON) {
+              document.getElementById("addPokemonButton").style.display =
+                "none";
+            }
+          }
+
+          // suficiente para que el DOM se genere
+
+          agregarPokemon();
+
+          const equipoParaEditar = localStorage.getItem("equipoAEditar");
+          if (equipoParaEditar) {
+            const equipo = JSON.parse(equipoParaEditar);
+            console.log("Editando equipo cargado:", equipo);
+
+            equipo.pokemons.forEach((pokemon, i) => {
+              agregarPokemon();
+              setTimeout(5000);
+              // Espera unos milisegundos a que se genere el formulario antes de rellenarlo
+              setTimeout(() => {
+                fetch(
+                  `https://pokeapi.co/api/v2/pokemon/${pokemon.name.toLowerCase()}`
+                )
+                  .then((res) => res.json())
+                  .then((data) => {
+                    const pokeId = data.id;
+                    const pokeSelect = document.getElementById(
+                      `pokemon-select-${i}`
+                    );
+                    if (pokeSelect) {
+                      pokeSelect.value = pokeId;
+                      pokeSelect.dispatchEvent(new Event("change"));
+                    }
+
+                    // Esperamos a que se cargue la info dinámica (habilidades, movimientos, stats)
+                    setTimeout(() => {
+                      const itemSelect = document.getElementById(
+                        `item-select-${i}`
+                      );
+                      if (itemSelect) itemSelect.value = pokemon.item || "";
+
+                      const abilitySelect = document.getElementById(
+                        `ability-select-${i}`
+                      );
+                      if (abilitySelect)
+                        abilitySelect.value = pokemon.ability || "";
+
+                      const natureSelect = document.getElementById(
+                        `nature-select-${i}`
+                      );
+                      if (natureSelect)
+                        natureSelect.value = pokemon.nature || "Serious";
+
+                      // Rellenar movimientos
+                      (pokemon.moves || []).forEach((move, j) => {
+                        const moveSelect = document.getElementById(
+                          `move-select-${i}-${j + 1}`
+                        );
+                        if (moveSelect) moveSelect.value = move;
+                      });
+
+                      // Rellenar EVs e IVs
+                      const stats = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"];
+
+                      stats.forEach((stat) => {
+                        const evInput = document.getElementById(
+                          `ev-${stat}-val-${i}`
+                        );
+                        const ivInput = document.getElementById(
+                          `iv-${stat}-val-${i}`
+                        );
+                        if (evInput)
+                          evInput.value =
+                            pokemon.evs?.[stat.toLowerCase()] ?? 0;
+                        if (ivInput)
+                          ivInput.value =
+                            pokemon.ivs?.[stat.toLowerCase()] ?? 31;
+
+                        const evSlider = document.getElementById(
+                          `ev-${stat}-${i}`
+                        );
+                        const ivSlider = document.getElementById(
+                          `iv-${stat}-${i}`
+                        );
+                        if (evSlider) evSlider.value = evInput.value;
+                        if (ivSlider) ivSlider.value = ivInput.value;
+                      });
+
+                      // Actualizar stats visuales
+                      statNames.forEach((stat) => {
+                        const ev = parseInt(
+                          document.getElementById(`ev-${stat}-${i}`)?.value || 0
+                        );
+                        const iv = parseInt(
+                          document.getElementById(`iv-${stat}-${i}`)?.value ||
+                            31
+                        );
+                        document.getElementById(
+                          `result-${stat}-${i}`
+                        ).textContent = calcularStat(
+                          baseStats[stat],
+                          ev,
+                          iv,
+                          stat,
+                          i
+                        );
+                      });
+
+                      updateEVTotal(i);
+                    }, 500);
+                  });
+              }, i * 200);
+            });
+
+            localStorage.removeItem("equipoAEditar");
+          }
+        },
+        50
+      );
+      function precargarEVsYIVs(pokemon, index = 0) {
+        const statMap = {
+          HP: "hp",
+          Atk: "atk",
+          Def: "def",
+          SpA: "spatk",
+          SpD: "spdef",
+          Spe: "speed",
+        };
+
+        for (const [statLabel, key] of Object.entries(statMap)) {
+          const ev = pokemon.evs?.[key] ?? 0;
+          const iv = pokemon.ivs?.[key] ?? 31;
+
+          const evInputId = `ev-${statLabel}-val-${index}`;
+          const evSliderId = `ev-${statLabel}-${index}`;
+          const ivInputId = `iv-${statLabel}-val-${index}`;
+          const ivSliderId = `iv-${statLabel}-${index}`;
+
+          const evInput = document.getElementById(evInputId);
+          const evSlider = document.getElementById(evSliderId);
+          const ivInput = document.getElementById(ivInputId);
+          const ivSlider = document.getElementById(ivSliderId);
+
+          console.log(`Asignando EV/IV de ${statLabel}: EV=${ev}, IV=${iv}`);
+
+          if (evInput && evSlider) {
+            evInput.value = ev;
+            evSlider.value = ev;
+            evSlider.dispatchEvent(new Event("input"));
+          } else {
+            console.warn(`No se encontró input o slider para EV ${statLabel}`, {
+              evInput,
+              evSlider,
+            });
+          }
+
+          if (ivInput && ivSlider) {
+            ivInput.value = iv;
+            ivSlider.value = iv;
+            ivSlider.dispatchEvent(new Event("input"));
+          } else {
+            console.warn(`No se encontró input o slider para IV ${statLabel}`, {
+              ivInput,
+              ivSlider,
+            });
+          }
+        }
+      }
+
+      async function precargarFormulario(pokemon, index) {
+        const select = document.getElementById(`pokemon-select-${index}`);
+        if (!select) return;
+
+        // Deshabilitar el select (no se puede cambiar el Pokémon)
+        select.disabled = true;
+
+        // Forzar la selección del Pokémon correcto
+        const response = await fetch(
+          `https://pokeapi.co/api/v2/pokemon/${pokemon.name.toLowerCase()}`
+        );
+        const data = await response.json();
+
+        select.value = data.id;
+        select.dispatchEvent(new Event("change"));
+
+        // Esperar a que habilidades y stats se carguen
+        setTimeout(() => {
+          // Habilidad
+          const abilitySelect = document.getElementById(
+            `ability-select-${index}`
+          );
+          if (abilitySelect) abilitySelect.value = pokemon.ability;
+
+          // Naturaleza
+          const natureSelect = document.getElementById(
+            `nature-select-${index}`
+          );
+          if (natureSelect) natureSelect.value = pokemon.nature;
+
+          // Objeto
+          const itemSelect = document.getElementById(`item-select-${index}`);
+          if (itemSelect) itemSelect.value = pokemon.item;
+
+          // Movimientos
+          for (let i = 1; i <= 4; i++) {
+            const move = pokemon.moves?.[i - 1];
+            const moveSelect = document.getElementById(
+              `move-select-${index}-${i}`
+            );
+            if (moveSelect && move) moveSelect.value = move;
+          }
+
+          // Suponiendo que el Pokémon que estás editando está en localStorage
+          
+        if (pokemonAEditar) {
+          precargarEVsYIVs(pokemonAEditar.pokemonData, 0); // el index es 0 si solo hay un form
+        }
+
+          if (pokemonAEditar) {
+            // Agregar formulario
+            const index = 0;
+            agregarPokemon(); // esto crea el form dinámicamente (y ejecuta bindStatEvents)
+
+            // Esperamos un poco a que esté el DOM y se hayan cargado datos del Pokémon
+            setTimeout(() => {
+              // Fijamos el Pokémon (solo imagen y datos, no permite cambiar nombre)
+              const name = pokemonAEditar.name.toLowerCase();
+              const select = document.getElementById(`pokemon-select-${index}`);
+              const image = document.getElementById(`pokemon-image-${index}`);
+
+              if (select && image) {
+                select.value = name;
+                select.disabled = true; // 🔒 No editable
+                image.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${name}.gif`;
+
+                // Forzar cambio para que cargue habilidades y movimientos
+                select.dispatchEvent(new Event("change"));
+              }
+
+              // Esperar más para que se carguen las habilidades y movimientos desde la PokéAPI
+              setTimeout(() => {
+                // Preseleccionar objeto
+                const itemSelect = document.getElementById(
+                  `item-select-${index}`
+                );
+                if (itemSelect) itemSelect.value = pokemonAEditar.item || "";
+
+                // Naturaleza
+                const natureSelect = document.getElementById(
+                  `nature-select-${index}`
+                );
+                if (natureSelect)
+                  natureSelect.value = pokemonAEditar.nature || "Serious";
+
+                // Habilidad
+                const abilitySelect = document.getElementById(
+                  `ability-select-${index}`
+                );
+                if (abilitySelect)
+                  abilitySelect.value = pokemonAEditar.ability || "";
+
+                // Movimientos
+                for (let i = 0; i < 4; i++) {
+                  const move = pokemonAEditar.moves[i];
+                  const moveSelect = document.getElementById(
+                    `move-select-${index}-${i + 1}`
+                  );
+                  if (moveSelect && move) {
+                    moveSelect.value = move;
+                  }
+                }
+
+                // EVs / IVs y sliders
+                const statMap = {
+                  HP: "hp",
+                  Atk: "atk",
+                  Def: "def",
+                  SpA: "spatk",
+                  SpD: "spdef",
+                  Spe: "speed",
+                };
+                
+                for (const [statLabel, key] of Object.entries(statMap)) {
+                  const ev = pokemonAEditar.evs?.[key] ?? 0;
+                  const iv = pokemonAEditar.ivs?.[key] ?? 31;
+
+                  const evSlider = document.getElementById(
+                    `ev-${statLabel}-${index}`
+                  );
+                  const evInput = document.getElementById(
+                    `ev-${statLabel}-val-${index}`
+                  );
+                  const ivSlider = document.getElementById(
+                    `iv-${statLabel}-${index}`
+                  );
+                  const ivInput = document.getElementById(
+                    `iv-${statLabel}-val-${index}`
+                  );
+
+                  if (evSlider && evInput) {
+                    evSlider.value = ev;
+                    evInput.value = ev;
+                    evSlider.dispatchEvent(new Event("input")); // <- actualiza total
+                  }
+
+                  if (ivSlider && ivInput) {
+                    ivSlider.value = iv;
+                    ivInput.value = iv;
+                    ivSlider.dispatchEvent(new Event("input")); // <- actualiza total
+                  }
+                }
+              }, 1000); // esperar 1 segundo para que se cargue todo desde la PokéAPI
+            }, 300); // esperar 300ms para que esté creado el formulario
+          }
+
+          updateEVTotal(index);
+        }, 1000); // esperar 1 segundo para asegurar que todo se haya generado
+      }
+
+      setTimeout(() => {
+        const pokemonAEditar = JSON.parse(
+          localStorage.getItem("pokemonAEditar")
+        );
+        if (pokemonAEditar) {
+          precargarEVsYIVs(pokemonAEditar.pokemonData, 0); // el index es 0 si solo hay un form
+        }
+      }, 1000); // Asegúrate que sea lo bastante largo para que el DOM esté renderizado
+
+      setTimeout(() => {
+        const statMap = {
+          HP: "hp",
+          Atk: "atk",
+          Def: "def",
+          SpA: "spatk",
+          SpD: "spdef",
+          Spe: "speed",
+        };
+        const pokemonAEditar = JSON.parse(
+          localStorage.getItem("pokemonAEditar")
+        );
+        if (pokemonAEditar) {
+          precargarEVsYIVs(pokemonAEditar.pokemonData, 0); // el index es 0 si solo hay un form
+        }
+        for (const [statLabel, key] of Object.entries(statMap)) {
+          const ev = pokemonAEditar.evs?.[key] ?? 0;
+          const iv = pokemonAEditar.ivs?.[key] ?? 31;
+
+          const evSlider = document.getElementById(`ev-${statLabel}-0`);
+          const evInput = document.getElementById(`ev-${statLabel}-val-0`);
+          const ivSlider = document.getElementById(`iv-${statLabel}-0`);
+          const ivInput = document.getElementById(`iv-${statLabel}-val-0`);
+
+          if (evSlider && evInput) {
+            evSlider.value = ev;
+            evInput.value = ev;
+            evSlider.dispatchEvent(new Event("input")); // Actualiza visualmente
+          }
+
+          if (ivSlider && ivInput) {
+            ivSlider.value = iv;
+            ivInput.value = iv;
+            ivSlider.dispatchEvent(new Event("input"));
+          }
+        }
+      }, 500); // suficiente para que el DOM se genere
+    </script>
+
+    <script>
+      document
+        .getElementById("guardarEquipo")
+        .addEventListener("click", async () => {
+          const email = localStorage.getItem("sessionEmail");
+          const pokemonEditDataRaw = localStorage.getItem("pokemonAEditar");
+
+          if (!email || !pokemonEditDataRaw) {
+            console.error("Falta email o datos del Pokémon en edición");
+            return;
+          }
+
+          const pokemonEditData = JSON.parse(pokemonEditDataRaw);
+          const teamId = pokemonEditData.teamId;
+          const indexPokemon = pokemonEditData.pokemonIndex;
+
+          const index = 0; // Solo hay un formulario
+          const form = document.querySelector(".pokemon-form");
+
+          const pokemonSelect = form.querySelector(`#pokemon-select-${index}`);
+          const nombre =
+            pokemonSelect?.options[pokemonSelect.selectedIndex]?.text?.split(
+              " - "
+            )[1] || "";
+
+          const item =
+            form.querySelector(`#item-select-${index}`)?.value.trim() || "";
+          const habilidad =
+            form.querySelector(`#ability-select-${index}`)?.value || "";
+          const naturaleza =
+            form.querySelector(`#nature-select-${index}`)?.value || "";
+
+          const movimientos = [];
+          for (let i = 1; i <= 4; i++) {
+            const moveSelect = form.querySelector(`#move-select-${index}-${i}`);
+            const moveValue = moveSelect?.value?.trim();
+            if (moveValue) movimientos.push(moveValue);
+          }
+
+          const statMap = {
+            HP: "hp",
+            Atk: "atk",
+            Def: "def",
+            SpA: "spatk",
+            SpD: "spdef",
+            Spe: "speed",
+          };
+
+          const evs = {};
+          const ivs = {};
+
+          Object.keys(statMap).forEach((statLabel) => {
+            const statKey = statMap[statLabel];
+            const evInput = form.querySelector(`#ev-${statLabel}-val-${index}`);
+            const ivInput = form.querySelector(`#iv-${statLabel}-val-${index}`);
+            evs[statKey] = evInput ? parseInt(evInput.value) || 0 : 0;
+            ivs[statKey] = ivInput ? parseInt(ivInput.value) || 0 : 31;
+          });
+
+          const pokemonActualizado = {
+            id: crypto.randomUUID(), // Puedes mantener el ID si quieres
+            name: nombre,
+            item,
+            ability: habilidad,
+            nature: naturaleza,
+            moves: movimientos,
+            evs,
+            ivs,
+          };
+
+          try {
+            const res = await fetch(
+              "/api/teams/update-pokemon",
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  teamId: teamId,
+                  pokemonIndex: indexPokemon,
+                  updatedPokemon: pokemonActualizado,
+                }),
+              }
+            );
+
+            const text = await res.text();
+            if (res.ok) {
+              localStorage.removeItem("pokemonAEditar");
+              localStorage.setItem("equipoGuardado", "true");
+              window.location.href = "/misEquipos";
+            } else {
+              console.error("Error guardando:", text);
+            }
+          } catch (err) {
+            console.error("Fallo en el guardado:", err);
+          }
+        });
+    </script>
+
+    <script>
+      const sessionArea = document.getElementById("sessionArea");
+      const sessionUser = localStorage.getItem("sessionUser");
+
+      if (sessionUser) {
+        // Usuario logueado → mostrar botón "Cerrar sesión"
+        const logoutBtn = document.createElement("button");
+        logoutBtn.className = "btn btn-danger";
+        logoutBtn.textContent = "Cerrar sesión";
+
+        logoutBtn.onclick = () => {
+          localStorage.removeItem("sessionUser");
+          localStorage.removeItem("sessionEmail");
+          window.location.href = "/login";
+        };
+
+        sessionArea.appendChild(logoutBtn);
+      } else {
+        // Usuario NO logueado → mostrar "Iniciar sesión"
+        const loginLink = document.createElement("a");
+        loginLink.href = "/login";
+        loginLink.className = "btn btn-danger";
+        loginLink.textContent = "Iniciar sesión";
+
+        sessionArea.appendChild(loginLink);
+      }
+
+      // Verificar sesión activa
+      const user = localStorage.getItem("sessionUser");
+      if (!user) {
+        window.location.href = "/login";
+      }
+    </script>
+  </body>
+</html>

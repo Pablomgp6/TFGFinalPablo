@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mis Equipos - Pokémon Team Builder</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link rel="icon" href="img/logo.png" type="image/png" />
+  </head>
+
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Fondo rojo claro detrás del navbar -->
+    <div class="navbar-background"></div>
+
+    <!-- Navbar oscuro -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/index">
+          <img
+            src="img/logo.png"
+            alt="Logo"
+            width="80"
+            height="80"
+            class="d-inline-block align-text-top"
+          />
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+          class="collapse navbar-collapse justify-content-center"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav nav-center">
+            <li class="nav-item mx-4">
+              <a class="nav-link nav-link-custom" href="/pokedex"
+                >Pokedex</a
+              >
+            </li>
+            <li class="nav-item mx-4">
+              <a class="nav-link nav-link-custom" href="/crearEquipo"
+                >Creador</a
+              >
+            </li>
+            
+            <li class="nav-item mx-4">
+              <a class="nav-link nav-link-custom active" href="/misEquipos"
+                >Mis Equipos</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div class="d-flex" id="sessionArea"></div>
+      </div>
+    </nav>
+
+    <main class="flex-fill">
+      <div style="margin-top: 120px">
+        <h1 class="text-center mt-5 fw-bold text-shadow d-none" id="teamTitle">
+          Equipos Pokémon de
+        </h1>
+      </div>
+
+      <div class="container mt-4">
+        <div id="teamContainer" class="row justify-content-center"></div>
+      </div>
+    </main>
+
+    <!-- Footer mejorado -->
+    <footer class="footer text-white py-5">
+      <div class="container">
+        <div class="row text-center align-items-center">
+          <div
+            class="col-md-4 mb-4 mb-md-0 d-flex flex-column justify-content-center align-items-center"
+          >
+            <h5>Pokémon Team Builder</h5>
+            <p class="mb-0">&copy; 2025 Todos los derechos reservados.</p>
+          </div>
+
+          <div
+            class="col-md-4 mb-4 mb-md-0 d-flex flex-column justify-content-center align-items-center"
+          >
+            <ul class="list-unstyled">
+              <li>
+                <a href="#" class="footer-link nav-link-animated"
+                  >Aviso Legal</a
+                >
+              </li>
+              <li>
+                <a href="#" class="footer-link nav-link-animated"
+                  >Política de Privacidad</a
+                >
+              </li>
+              <li>
+                <a href="#" class="footer-link nav-link-animated">Contacto</a>
+              </li>
+            </ul>
+          </div>
+
+          <div
+            class="col-md-4 d-flex flex-column justify-content-center align-items-center"
+          >
+            <div>
+              <a href="#" class="me-3 footer-icon"
+                ><i class="bi bi-twitter"></i
+              ></a>
+              <a href="#" class="me-3 footer-icon"
+                ><i class="bi bi-instagram"></i
+              ></a>
+              <a href="#" class="footer-icon"><i class="bi bi-tiktok"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      const sessionArea = document.getElementById("sessionArea");
+      const sessionUser = localStorage.getItem("sessionUser");
+
+      if (sessionUser) {
+        const logoutBtn = document.createElement("button");
+        logoutBtn.className = "btn btn-danger";
+        logoutBtn.textContent = "Cerrar sesión";
+        logoutBtn.onclick = () => {
+          localStorage.removeItem("sessionUser");
+          localStorage.removeItem("sessionEmail");
+          window.location.href = "/login";
+        };
+        sessionArea.appendChild(logoutBtn);
+      } else {
+        const loginLink = document.createElement("a");
+        loginLink.href = "/login";
+        loginLink.className = "btn btn-danger";
+        loginLink.textContent = "Iniciar sesión";
+        sessionArea.appendChild(loginLink);
+      }
+
+      // Título personalizado
+      const username = localStorage.getItem("sessionUser");
+      const title = document.getElementById("teamTitle");
+      if (username && title) {
+        title.textContent = `Equipos Pokémon de ${username}`;
+      }
+
+      // Mostrar equipos o botón "+"
+      const email = localStorage.getItem("sessionEmail");
+      const teamContainer = document.getElementById("teamContainer");
+
+      if (!username || !email) {
+        window.location.href = "/login";
+      } else {
+        fetch(
+          `/api/teams/user?email=${encodeURIComponent(email)}`
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            teamContainer.innerHTML = "";
+            renderEquipos(data);
+
+            if (!data || data.length === 0) {
+              // Ocultar título
+              document.getElementById("teamTitle").classList.add("d-none");
+
+              teamContainer.innerHTML = `
+  <div class="d-flex flex-column align-items-center justify-content-center text-center" style="min-height: 60vh;">
+    <h3 class="text-muted mb-4">No tienes ningún equipo aún</h3>
+    <a href="/crearEquipo"
+       class="btn btn-danger rounded-circle shadow-lg d-flex align-items-center justify-content-center"
+       style="width: 100px; height: 100px; font-size: 3rem; text-decoration: none; padding-bottom: 15px;">
+      +
+    </a>
+    <p class="mt-3 text-muted">Haz clic en el botón para crear tu primer equipo</p>
+  </div>
+`;
+
+              document.querySelector("button").onclick = () => {
+                window.location.href = "/crearEquipo";
+              };
+            } else {
+              // Mostrar título
+              document.getElementById("teamTitle").classList.remove("d-none");
+
+              // Mostrar tarjetas...
+
+              // Mostrar tarjetas
+            }
+          })
+          .catch((err) => {
+            teamContainer.innerHTML =
+              "<p class='text-center text-danger'>Error al cargar equipos.</p>";
+            console.error(err);
+          });
+      }
+    </script>
+
+    <!-- Modal de confirmación -->
+    <div
+      class="modal fade"
+      id="confirmDeleteModal"
+      tabindex="-1"
+      aria-labelledby="confirmDeleteLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="confirmDeleteLabel">
+              Confirmar eliminación
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <p>
+              ¿Estás seguro de que deseas eliminar este equipo? Esta acción no
+              se puede deshacer.
+            </p>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button id="confirmDeleteBtn" type="button" class="btn btn-danger">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal de equipo agregado -->
+    <div
+      class="modal fade"
+      id="newTeamSuccessModal"
+      tabindex="-1"
+      aria-labelledby="newTeamSuccessLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="newTeamSuccessLabel">
+              ¡Equipo guardado!
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <p>
+              Tu equipo se ha guardado correctamente y ya aparece en la lista.
+            </p>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-dismiss="modal"
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal confirmación borrar Pokémon -->
+    <div
+      class="modal fade"
+      id="confirmDeletePokemonModal"
+      tabindex="-1"
+      aria-labelledby="confirmDeletePokemonLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="confirmDeletePokemonLabel">
+              Confirmar eliminación
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <p id="confirmDeletePokemonText">
+              ¿Estás seguro de que quieres borrar este Pokémon?
+            </p>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              id="confirmDeletePokemonBtn"
+              type="button"
+              class="btn btn-danger"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      async function renderEquipos(data) {
+        const teamContainer = document.getElementById("teamContainer");
+        teamContainer.innerHTML = ""; // 🔁 Limpia antes de renderizar
+
+        for (const team of data) {
+          const col = document.createElement("div");
+          col.className = "col-12 mb-4";
+
+          const card = document.createElement("div");
+          card.className = "card shadow-sm p-3";
+
+          const cardBody = document.createElement("div");
+          cardBody.className = "card-body";
+
+          const title = document.createElement("h5");
+          title.className = "card-title text-center mb-3";
+          title.textContent = team.teamName;
+          cardBody.appendChild(title);
+
+          const spriteRow = document.createElement("div");
+          spriteRow.className =
+            "d-flex justify-content-center align-items-center flex-wrap mb-4";
+
+          spriteRow.style.gap = "20px";
+
+          const pokemons = Array.isArray(team.pokemons)
+            ? team.pokemons.slice(0, 6)
+            : [];
+          const totalSlots = 6;
+
+          for (let i = 0; i < totalSlots; i++) {
+            const pokemon = pokemons[i];
+
+            if (pokemon && pokemon.name) {
+              try {
+                const res = await fetch(
+                  `https://pokeapi.co/api/v2/pokemon/${pokemon.name.toLowerCase()}`
+                );
+                const pokeData = await res.json();
+                const id = pokeData.id;
+
+                const pokeWrapper = document.createElement("div");
+                pokeWrapper.className = "d-flex flex-column align-items-center";
+                pokeWrapper.style.flex = "0 0 100px";
+
+                const nameLabel = document.createElement("div");
+                nameLabel.textContent = pokemon.name;
+                nameLabel.className = "text-capitalize text-center";
+                nameLabel.style.backgroundColor = "rgba(255,255,255,0.95)";
+                nameLabel.style.border = "1px solid #ddd";
+                nameLabel.style.borderRadius = "10px";
+                nameLabel.style.padding = "6px 12px";
+                nameLabel.style.marginBottom = "16px";
+                nameLabel.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
+                nameLabel.style.fontWeight = "500";
+                nameLabel.style.fontSize = "0.9rem";
+                nameLabel.style.maxWidth = "120px";
+                nameLabel.style.overflow = "hidden";
+                nameLabel.style.textOverflow = "ellipsis";
+                nameLabel.style.whiteSpace = "nowrap";
+
+                const buttonGroup = document.createElement("div");
+                buttonGroup.className = "mb-2 d-flex gap-1";
+
+                const editBtn = document.createElement("button");
+                editBtn.className = "btn btn-sm btn-outline-primary";
+                editBtn.innerHTML = '<i class="bi bi-pencil"></i>';
+                editBtn.title = "Editar Pokémon";
+                editBtn.setAttribute("data-index", i);
+
+                editBtn.addEventListener("click", () => {
+                  const pokemonAEditar = {
+                    teamId: team.id,
+                    pokemonIndex: i,
+                    pokemonData: pokemon,
+                  };
+
+                  localStorage.setItem(
+                    "pokemonAEditar",
+                    JSON.stringify(pokemonAEditar)
+                  );
+                  window.location.href = "/editarPokemon";
+                });
+
+                const deletePokemonBtn = document.createElement("button");
+                deletePokemonBtn.className =
+                  "btn btn-sm btn-outline-danger btn-delete-pokemon";
+                deletePokemonBtn.innerHTML = '<i class="bi bi-trash"></i>';
+                deletePokemonBtn.title = "Borrar Pokémon";
+                deletePokemonBtn.setAttribute("data-index", i);
+                deletePokemonBtn.setAttribute("data-team-id", team.id);
+
+                deletePokemonBtn.addEventListener("click", () => {
+                  // Guardar info temporal
+                  window._pokemonAEliminar = {
+                    teamId: team.id,
+                    index: i,
+                    name: pokemon.name,
+                  };
+
+                  // Actualizar texto del modal y mostrarlo
+                  document.getElementById(
+                    "confirmDeletePokemonText"
+                  ).textContent = `¿Estás seguro de que deseas eliminar a ${pokemon.name}?`;
+
+                  const modal = new bootstrap.Modal(
+                    document.getElementById("confirmDeletePokemonModal")
+                  );
+                  modal.show();
+                });
+
+                buttonGroup.appendChild(editBtn);
+                buttonGroup.appendChild(deletePokemonBtn);
+
+                const img = document.createElement("img");
+                img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${id}.gif`;
+                img.alt = pokemon.name;
+                img.style.height = "64px";
+                img.title = pokemon.name;
+
+                pokeWrapper.appendChild(nameLabel);
+                pokeWrapper.appendChild(buttonGroup);
+                pokeWrapper.appendChild(img);
+                spriteRow.appendChild(pokeWrapper);
+              } catch (err) {
+                console.error(
+                  "Error cargando imagen del Pokémon",
+                  pokemon.name,
+                  err
+                );
+              }
+            } else {
+              const addWrapper = document.createElement("div");
+              addWrapper.className = "d-flex flex-column align-items-center";
+              addWrapper.style.flex = "0 0 100px";
+              addWrapper.style.marginTop = "60px";
+
+              const addButton = document.createElement("button");
+              addButton.className =
+                "btn btn-outline-success rounded-circle d-flex align-items-center justify-content-center";
+              addButton.style.width = "64px";
+              addButton.style.height = "64px";
+              addButton.style.fontSize = "2rem";
+              addButton.style.lineHeight = "1";
+              addButton.style.paddingTop = "0px";
+              addButton.textContent = "+";
+              addButton.title = "Añadir Pokémon";
+
+              // ✅ Aquí sí tienes acceso a la variable 'team' correctamente
+              addButton.onclick = () => {
+                localStorage.setItem("equipoEditando", JSON.stringify(team));
+                window.location.href = "/nuevoPokemon";
+              };
+
+              addWrapper.appendChild(addButton);
+              spriteRow.appendChild(addWrapper);
+            }
+
+            // DIVISOR "|"
+            if (i < totalSlots - 1) {
+              const divider = document.createElement("span");
+              divider.className = "mx-3 fs-4 text-secondary poke-divider";
+              divider.textContent = "|";
+              divider.style.alignSelf = "center";
+              divider.style.marginTop = "55px";
+
+              spriteRow.appendChild(divider);
+            }
+          }
+
+          cardBody.appendChild(spriteRow);
+
+          const buttonRow = document.createElement("div");
+          buttonRow.className = "d-flex justify-content-center gap-4 mt-4";
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.className = "btn d-flex align-items-center gap-2 px-4 py-2";
+          deleteBtn.style.backgroundColor = "#E24E3C";
+          deleteBtn.style.color = "white";
+          deleteBtn.innerHTML = `<i class="bi bi-trash"></i> Eliminar`;
+          deleteBtn.setAttribute("data-bs-toggle", "modal");
+          deleteBtn.setAttribute("data-bs-target", "#confirmDeleteModal");
+          deleteBtn.addEventListener("click", () => {
+            window._equipoAEliminar = {
+              id: team.id,
+              element: col,
+            };
+          });
+
+          function exportarEquipo(team) {
+            const statMap = {
+              hp: "HP",
+              atk: "Atk",
+              def: "Def",
+              spAtk: "SpA",
+              spDef: "SpD",
+              speed: "Spe",
+            };
+            const statKeys = Object.keys(statMap);
+
+            const lines = team.pokemons.map((pokemon) => {
+              // Asegúrate de acceder correctamente a eVs e iVs si vienen mal capitalizados
+              const evs = pokemon.evs || pokemon.EVs || pokemon.eVs || {};
+              const ivs = pokemon.ivs || pokemon.IVs || pokemon.iVs || {};
+
+              // Comprobación útil
+
+              const evParts = statKeys
+                .filter((stat) => evs[stat] && evs[stat] > 0)
+                .map((stat) => `${evs[stat]} ${statMap[stat]}`);
+              const evLine =
+                evParts.length > 0 ? `EVs: ${evParts.join(" / ")}` : "";
+
+              const ivParts = statKeys.map((stat) => {
+                const value = typeof ivs[stat] === "number" ? ivs[stat] : 31;
+                return `${value} ${statMap[stat]}`;
+              });
+              const ivLine = `IVs: ${ivParts.join(" / ")}`;
+
+              const ability = pokemon.ability || "";
+              const item = pokemon.item || "";
+              const nature = pokemon.nature || "Serious";
+              const moves = (pokemon.moves || [])
+                .filter(Boolean)
+                .map((m) => `- ${capitalize(m)}`)
+                .join("\n");
+
+              return (
+                `${pokemon.name} @ ${item}  
+                  Ability: ${ability}` +
+                                  (evLine ? `\n${evLine}` : "") +
+                                  `\n${ivLine}
+                  ${nature} Nature  
+                  ${moves}`
+              );
+            });
+
+            const showdownText = lines.join("\n\n");
+
+            navigator.clipboard.writeText(showdownText).then(() => {
+              const modal = new bootstrap.Modal(
+                document.getElementById("exportSuccessModal")
+              );
+              modal.show();
+            });
+          }
+
+          function capitalize(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+          }
+
+          const exportBtn = document.createElement("button");
+          exportBtn.className =
+            "btn btn-warning d-flex align-items-center gap-2 px-4 py-2";
+          exportBtn.style.color = "white";
+          exportBtn.innerHTML = `<i class="bi bi-clipboard"></i> Exportar`;
+
+          exportBtn.addEventListener("click", () => {
+            exportarEquipo(team);
+          });
+
+          buttonRow.appendChild(deleteBtn);
+          buttonRow.appendChild(exportBtn);
+
+          cardBody.appendChild(buttonRow);
+          card.appendChild(cardBody);
+          col.appendChild(card);
+          teamContainer.appendChild(col);
+        }
+
+        // Tarjeta final con botón +
+        const col = document.createElement("div");
+        col.className = "col-12 mb-4";
+
+        const card = document.createElement("div");
+        card.className = "card shadow-sm p-3";
+
+        const cardBody = document.createElement("div");
+        cardBody.className =
+          "card-body d-flex flex-column align-items-center justify-content-center text-center";
+
+        const addBtn = document.createElement("a");
+        addBtn.href = "/crearEquipo";
+        addBtn.className =
+          "btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center";
+        addBtn.style.width = "100px";
+        addBtn.style.height = "100px";
+        addBtn.style.paddingBottom = "15px";
+        addBtn.style.fontSize = "3rem";
+        addBtn.style.textDecoration = "none";
+        addBtn.title = "Crear nuevo equipo";
+        addBtn.textContent = "+";
+
+        const label = document.createElement("p");
+        label.className = "mt-3 text-muted";
+        label.textContent = "Añade un equipo nuevo";
+
+        cardBody.appendChild(addBtn);
+        cardBody.appendChild(label);
+        card.appendChild(cardBody);
+        col.appendChild(card);
+        teamContainer.appendChild(col);
+      }
+      const confirmDeletePokemonBtn = document.getElementById(
+        "confirmDeletePokemonBtn"
+      );
+
+      confirmDeletePokemonBtn.addEventListener("click", async () => {
+        const info = window._pokemonAEliminar;
+        if (!info) return;
+
+        try {
+          const res = await fetch(
+            "/api/teams/remove-pokemon",
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                teamId: info.teamId,
+                pokemonIndex: info.index,
+              }),
+            }
+          );
+
+          if (res.ok) {
+            const updatedTeams = await fetch(
+              `/api/teams/user?email=${encodeURIComponent(
+                localStorage.getItem("sessionEmail")
+              )}`
+            ).then((r) => r.json());
+
+            await renderEquipos(updatedTeams);
+
+            // Cerrar el modal
+            const modal = bootstrap.Modal.getInstance(
+              document.getElementById("confirmDeletePokemonModal")
+            );
+            modal.hide();
+          } else {
+            alert("No se pudo eliminar el Pokémon");
+          }
+        } catch (err) {
+          console.error("Error al eliminar Pokémon:", err);
+        }
+      });
+    </script>
+
+    <script>
+      const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+      confirmDeleteBtn.addEventListener("click", async () => {
+        localStorage.setItem("equipoEliminado", "true");
+
+        const equipo = window._equipoAEliminar;
+        if (!equipo) return;
+
+        try {
+          const res = await fetch(
+            `/api/teams/delete?id=${equipo.id}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          if (res.ok) {
+            equipo.element.remove();
+            const modal = bootstrap.Modal.getInstance(
+              document.getElementById("confirmDeleteModal")
+            );
+            modal.hide();
+          } else {
+          }
+        } catch (err) {
+          console.error("Error eliminando equipo:", err);
+        }
+      });
+      // Mostrar modal de éxito si se acaba de guardar un equipo
+      if (localStorage.getItem("equipoGuardado") === "true") {
+        localStorage.removeItem("equipoGuardado");
+        const successModal = new bootstrap.Modal(
+          document.getElementById("newTeamSuccessModal")
+        );
+        successModal.show();
+      }
+    </script>
+
+    <!-- Modal de confirmación de exportación -->
+    <div
+      class="modal fade"
+      id="exportSuccessModal"
+      tabindex="-1"
+      aria-labelledby="exportSuccessLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="exportSuccessLabel">
+              Exportación completada
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <p>¡Equipo copiado al portapapeles en formato Showdown!</p>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-dismiss="modal"
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
